@@ -6,166 +6,259 @@
   <title>Contact — Luminous Studio</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root {
+      --bg: #0c0c0e; --surface: #141416; --surface2: #1a1a1e;
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+      --gold: #c9a84c; --gold-light: #e8c97a; --gold-dim: rgba(201,168,76,0.15);
+      --text: #f0ede8; --text2: #a09d97; --text3: #5a5855; --white: #faf9f7;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-weight:300; overflow-x:hidden; min-height:100vh; cursor:none; }
+    .cur { width:8px; height:8px; background:var(--gold); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .1s; }
+    .cur-r { width:32px; height:32px; border:1px solid rgba(201,168,76,.4); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all .18s ease; }
+    body.cursor-hover .cur { transform:translate(-50%,-50%) scale(3); background:transparent; border:1px solid var(--gold); }
+    body.cursor-hover .cur-r { transform:translate(-50%,-50%) scale(1.6); border-color:rgba(201,168,76,.7); }
+    @media (pointer:coarse) { .cur,.cur-r { display:none; } body { cursor:auto; } }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:800; padding:1.6rem 3rem; display:flex; align-items:center; justify-content:space-between; transition:background .4s, border-color .4s, padding .3s; border-bottom:1px solid transparent; }
+    nav.scrolled { background:rgba(12,12,14,.88); border-color:var(--border); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); padding-top:1rem; padding-bottom:1rem; }
+    .logo-wrap { display:flex; align-items:center; gap:.7rem; cursor:none; text-decoration:none; }
+    .logo-svg { width:38px; height:38px; flex-shrink:0; }
+    .logo-text-wrap { display:flex; flex-direction:column; line-height:1; }
+    .logo-name { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:400; letter-spacing:.18em; color:var(--white); text-transform:uppercase; }
+    .logo-name .lum { color:var(--gold); }
+    .logo-sub { font-family:'Syne',sans-serif; font-size:.52rem; letter-spacing:.4em; text-transform:uppercase; color:var(--text3); margin-top:.15rem; }
+    .nav-links { display:flex; gap:2.2rem; list-style:none; }
+    .nav-links a { font-family:'Syne',sans-serif; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text2); text-decoration:none; cursor:none; transition:color .2s; position:relative; padding-bottom:.2rem; }
+    .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--gold); transition:width .25s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+    .nav-btn { font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; background:transparent; border:1px solid var(--gold); color:var(--gold); padding:.6rem 1.6rem; cursor:none; transition:background .2s, color .2s; text-decoration:none; display:inline-block; }
+    .nav-btn:hover { background:var(--gold); color:var(--bg); }
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:none; padding:.2rem; }
+    .hamburger span { display:block; width:24px; height:1px; background:var(--text); transition:all .3s; }
+    .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+    .mobile-menu { display:none; position:fixed; inset:0; z-index:700; background:rgba(12,12,14,.97); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; gap:2.5rem; }
+    .mobile-menu.open { display:flex; animation:pageIn .3s ease; }
+    .mobile-menu a { font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:300; color:var(--text); text-decoration:none; letter-spacing:.08em; cursor:none; transition:color .2s; }
+    .mobile-menu a:hover { color:var(--gold); }
+
+    /* SHARED */
+    .sec { padding:7rem 0; }
+    .lbl { font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; display:flex; align-items:center; gap:.8rem; }
+    .lbl::before { content:''; width:24px; height:1px; background:var(--gold); flex-shrink:0; }
+    .display-title { font-family:'Cormorant Garamond',serif; font-size:clamp(3rem,7vw,6rem); font-weight:300; line-height:1.05; color:var(--white); }
+    .display-title em { font-style:italic; color:var(--gold-light); }
+    .body-text { font-size:.95rem; line-height:1.9; color:var(--text2); font-weight:300; }
+    .rv { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+    .rv.vis { opacity:1; transform:translateY(0); }
+    .rv-d1 { transition-delay:.1s; }
+    @keyframes pageIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeU { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes ping { 0%{width:10px;height:10px;opacity:1} 100%{width:80px;height:80px;opacity:0} }
+
+    .pg-hero { padding:9rem 0 4rem; position:relative; overflow:hidden; }
+    .pg-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,168,76,.04) 0%, transparent 70%); pointer-events:none; }
+    .pg-hero .display-title { animation:fadeU .9s .2s both; }
+    .pg-hero .lbl { animation:fadeU .7s .1s both; }
+    .pg-hero .body-text { animation:fadeU .8s .35s both; }
+
+    /* CONTACT */
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start; }
+    .contact-info { display:flex; flex-direction:column; gap:2.5rem; }
+    .ci-item { border-left:2px solid var(--gold-dim); padding-left:1.5rem; }
+    .ci-label { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); margin-bottom:.4rem; }
+    .ci-val { font-size:.95rem; color:var(--text); }
+    .ci-val a { color:var(--text); text-decoration:none; transition:color .2s; cursor:none; }
+    .ci-val a:hover { color:var(--gold); }
+
+    /* FORM */
+    .contact-form { display:flex; flex-direction:column; gap:1.2rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+    .form-group { display:flex; flex-direction:column; gap:.5rem; }
+    .form-label { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--text3); }
+    .form-input, .form-textarea { background:var(--surface); border:1px solid var(--border); color:var(--text); padding:.9rem 1.2rem; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:300; outline:none; transition:border-color .2s; width:100%; }
+    .form-input:focus, .form-textarea:focus { border-color:var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color:var(--text3); }
+    .form-textarea { resize:vertical; min-height:140px; }
+    .form-select { background:var(--surface); border:1px solid var(--border); color:var(--text2); padding:.9rem 1.2rem; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:300; outline:none; transition:border-color .2s; width:100%; appearance:none; cursor:none; }
+    .form-select:focus { border-color:var(--gold); color:var(--text); }
+    .form-select option { background:var(--surface); }
+    .submit-btn { font-family:'Syne',sans-serif; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; background:var(--gold); color:var(--bg); border:none; padding:1.1rem 2.5rem; cursor:none; transition:background .2s; align-self:flex-start; }
+    .submit-btn:hover { background:var(--gold-light); }
+    .form-success { display:none; padding:2rem; border:1px solid var(--gold); background:var(--gold-dim); text-align:center; }
+    .form-success.show { display:block; animation:pageIn .4s ease; }
+    .form-success p { font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold-light); }
+
+    /* MAP */
+    .contact-map { height:280px; padding:0; overflow:hidden; border:1px solid var(--border); margin-top:1rem; }
+    .contact-map iframe { width:100%; height:100%; border:0; filter:grayscale(60%) invert(90%) contrast(0.85) sepia(20%); }
+
+    /* SOCIALS */
+    .btn-outline-sm { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; background:transparent; color:var(--text); border:1px solid var(--border2); padding:.55rem 1.2rem; cursor:none; text-decoration:none; display:inline-flex; align-items:center; transition:border-color .2s, color .2s; }
+    .btn-outline-sm:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* FOOTER */
+    footer { background:var(--bg); border-top:1px solid var(--border); padding:1.8rem 0; }
+    .ft-bottom { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .ft-copy { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); }
+    .ft-socials { display:flex; gap:1.5rem; }
+    .ft-socials a { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); text-decoration:none; transition:color .2s; cursor:none; }
+    .ft-socials a:hover { color:var(--gold); }
+
+    @media (max-width:768px) {
+      nav { padding:1.2rem 1.5rem; }
+      .nav-links, .nav-btn { display:none; }
+      .hamburger { display:flex; }
+      .contact-grid { grid-template-columns:1fr; gap:3rem; }
+      .form-row { grid-template-columns:1fr; }
+      .pg-hero { padding:7rem 0 3rem; }
+    }
+  </style>
 </head>
 <body>
 
 <div class="cur" id="cur"></div>
 <div class="cur-r" id="curR"></div>
 
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="work.html">Work</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="contact.html" style="color:var(--gold);">Contact</a>
+</div>
+
 <nav id="navbar">
-  <a class="logo-wrap" href="index.html">
+  <a href="index.html" class="logo-wrap">
     <svg class="logo-svg" viewBox="0 0 38 38" fill="none">
-      <circle cx="19" cy="19" r="18" stroke="#c9a84c" stroke-width=".8" opacity=".4"/>
-      <circle cx="19" cy="19" r="12" stroke="#c9a84c" stroke-width=".6" opacity=".25"/>
-      <polygon points="19,7 23,17 34,17 25,23 28,34 19,27 10,34 13,23 4,17 15,17" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".7"/>
-      <circle cx="19" cy="19" r="2.5" fill="#c9a84c"/>
+      <path d="M19 2L36 19L19 36L2 19Z" stroke="#c9a84c" stroke-width="1" fill="none"/>
+      <path d="M19 8L19 30" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M8 19L30 19" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <circle cx="19" cy="19" r="3.5" fill="#c9a84c" opacity=".9"/>
+      <circle cx="19" cy="19" r="6" stroke="#c9a84c" stroke-width=".6" opacity=".3"/>
+      <circle cx="19" cy="2" r="1.2" fill="#c9a84c" opacity=".7"/>
+      <circle cx="36" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="19" cy="36" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="2" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
     </svg>
     <div class="logo-text-wrap">
-      <span class="logo-name"><span class="lum">Lum</span>inous</span>
-      <span class="logo-sub">Studio</span>
+      <span class="logo-name"><span class="lum">Luminous</span> Studio</span>
+      <span class="logo-sub">Creative Agency</span>
     </div>
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="work.html">Work</a></li>
-    <li><a href="services.html">Services</a></li>
     <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
     <li><a href="contact.html" class="active">Contact</a></li>
   </ul>
-  <a class="nav-btn" href="contact.html">Start a Project</a>
+  <a href="contact.html" class="nav-btn d-none d-md-block">Start a Project</a>
   <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
 </nav>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html"    onclick="closeMobile()">Home</a>
-  <a href="work.html"     onclick="closeMobile()">Work</a>
-  <a href="services.html" onclick="closeMobile()">Services</a>
-  <a href="about.html"    onclick="closeMobile()">About</a>
-  <a href="contact.html"  onclick="closeMobile()">Contact</a>
+<!-- HERO -->
+<div class="pg-hero">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="lbl">Get In Touch</div>
+    <h1 class="display-title">Let's build<br>something <em>together</em></h1>
+    <p class="body-text mt-3" style="max-width:500px;">We take on a limited number of projects each quarter. Tell us about yours and let's find out if we're a good fit.</p>
+  </div>
 </div>
 
-<!-- ═══════════ CONTACT HEADER ═══════════ -->
-<section class="sec" style="padding-top:9rem;">
+<!-- CONTACT SECTION -->
+<section class="sec">
   <div class="container-fluid px-4 px-md-5">
-    <div class="row mb-5">
-      <div class="col-lg-6">
-        <div class="lbl rv">Get In Touch</div>
-        <h1 class="display-title rv rv-d1">Let's start a<br><em>conversation</em></h1>
-      </div>
-      <div class="col-lg-4 offset-lg-2 d-flex align-items-end">
-        <p class="body-text rv rv-d2">Tell us about your project and we'll respond within one business day.</p>
-      </div>
-    </div>
+    <div class="contact-grid rv">
 
-    <div class="row">
-
-      <!-- ═══════════ FORM ═══════════ -->
-      <div class="col-lg-7 rv rv-d1">
-        <div id="contactForm">
+      <!-- FORM -->
+      <div>
+        <div class="lbl">Send a Message</div>
+        <div class="contact-form" id="contactForm">
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">First Name</label>
-              <input type="text" class="form-input" placeholder="Emeka"/>
+              <input type="text" class="form-input" placeholder="Amara"/>
             </div>
             <div class="form-group">
               <label class="form-label">Last Name</label>
-              <input type="text" class="form-input" placeholder="Osei"/>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Email Address</label>
-              <input type="email" class="form-input" placeholder="hello@brand.com"/>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Company (optional)</label>
-              <input type="text" class="form-input" placeholder="Your Company"/>
+              <input type="text" class="form-input" placeholder="Kelechi"/>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Service Interest</label>
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="hello@yourcompany.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company / Organisation</label>
+            <input type="text" class="form-input" placeholder="Your Company"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Service of Interest</label>
             <select class="form-select">
-              <option value="">Select a service</option>
+              <option value="" disabled selected>Select a service</option>
               <option>Brand Identity</option>
-              <option>Digital Design</option>
-              <option>Visual Production</option>
-              <option>Brand Strategy</option>
-              <option>Full Engagement</option>
+              <option>Web Design & Development</option>
+              <option>Motion Design & Film</option>
+              <option>UI / UX Design</option>
+              <option>Strategy & Art Direction</option>
+              <option>Full Studio Package</option>
+              <option>Not sure yet</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">Project Details</label>
-            <textarea class="form-textarea" placeholder="Tell us about your project, goals, timeline, and budget..."></textarea>
+            <label class="form-label">Tell us about your project</label>
+            <textarea class="form-textarea" placeholder="Describe your project, goals, and timeline..."></textarea>
           </div>
-          <button class="submit-btn" onclick="submitForm()">Send Enquiry →</button>
+          <button class="submit-btn" onclick="submitForm()">Send Message →</button>
         </div>
-
-        <!-- Success State -->
         <div class="form-success" id="formSuccess">
-          <div class="lbl" style="margin-bottom:1rem;">Message Sent</div>
-          <h3 style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--white);margin-bottom:1rem;">We'll be in touch <em style="color:var(--gold-light);font-style:italic;">soon.</em></h3>
-          <p class="body-text">Thank you for reaching out. We typically respond within one business day.</p>
+          <p>Message sent — we'll be in touch within 2 business days. ✦</p>
         </div>
       </div>
 
-      <!-- ═══════════ CONTACT INFO ═══════════ -->
-      <div class="col-lg-4 offset-lg-1 rv rv-d2" style="padding-top:1rem;">
-        <div class="contact-info">
-          <div class="ci-row">
-            <div class="ci-icon">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1C5.686 1 3 3.686 3 7c0 4.5 6 10 6 10s6-5.5 6-10c0-3.314-2.686-6-6-6z" stroke="#c9a84c" stroke-width="1" fill="none"/><circle cx="9" cy="7" r="2" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
-            </div>
-            <div>
-              <div class="ci-label">Studio</div>
-              <div class="ci-val">Victoria Island, Lagos, Nigeria</div>
-            </div>
+      <!-- INFO -->
+      <div>
+        <div class="lbl">Studio Info</div>
+        <div class="contact-info mt-3">
+          <div class="ci-item">
+            <div class="ci-label">Email</div>
+            <div class="ci-val"><a href="mailto:hello@luminous.studio">hello@luminous.studio</a></div>
           </div>
-          <div class="ci-row">
-            <div class="ci-icon">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="1" stroke="#c9a84c" stroke-width="1" fill="none"/><polyline points="2,4 9,10 16,4" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
-            </div>
-            <div>
-              <div class="ci-label">Email</div>
-              <div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d1b9b4bdbdbe91bda4bcb8bfbea4a2ffa2a5a4b5b8be">[email&#160;protected]</a></div>
-            </div>
+          <div class="ci-item">
+            <div class="ci-label">Phone</div>
+            <div class="ci-val">+234 812 345 6789</div>
           </div>
-          <div class="ci-row">
-            <div class="ci-icon">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3h3l1.5 4-2 1.2a9.5 9.5 0 004.3 4.3L11 10.5l4 1.5v3A1 1 0 0114 16C7.373 16 2 10.627 2 4a1 1 0 011-1z" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
-            </div>
-            <div>
-              <div class="ci-label">WhatsApp</div>
-              <div class="ci-val">+234 916 681 9937</div>
-            </div>
+          <div class="ci-item">
+            <div class="ci-label">Location</div>
+            <div class="ci-val">Victoria Island, Lagos<br>Nigeria — Working Globally</div>
           </div>
-          <div class="ci-row">
-            <div class="ci-icon">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#c9a84c" stroke-width="1" fill="none"/><polyline points="9,5 9,9 12,12" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
-            </div>
-            <div>
-              <div class="ci-label">Hours</div>
-              <div class="ci-val">Mon – Fri, 9am – 6pm WAT</div>
-            </div>
+          <div class="ci-item">
+            <div class="ci-label">Studio Hours</div>
+            <div class="ci-val">Mon – Fri, 9am – 6pm WAT</div>
           </div>
         </div>
 
-        <!-- Map -->
-        <div class="contact-map mt-4" style="height:280px;padding:0;overflow:hidden;border:1px solid var(--border);">
+        <div class="contact-map mt-4">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7290281622184!2d3.4215938!3d6.4280573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf53aec4dd92d%3A0x7031f108b09f3bd8!2sVictoria%20Island%2C%20Lagos!5e0!3m2!1sen!2sng!4v1710000000000!5m2!1sen!2sng"
-            width="100%" height="100%" style="border:0;filter:grayscale(60%) invert(90%) contrast(0.85) sepia(20%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
 
-        <!-- Social Links -->
         <div class="mt-4">
           <div class="lbl" style="margin-bottom:.8rem;">Follow Our Work</div>
           <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-            <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">Instagram</a>
-            <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">Twitter</a>
-            <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">LinkedIn</a>
-            <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">Behance</a>
+            <a href="#" class="btn-outline-sm">Instagram</a>
+            <a href="#" class="btn-outline-sm">Twitter</a>
+            <a href="#" class="btn-outline-sm">LinkedIn</a>
+            <a href="#" class="btn-outline-sm">Behance</a>
           </div>
         </div>
       </div>
@@ -174,14 +267,72 @@
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
 <footer>
   <div class="container-fluid px-4 px-md-5">
     <div class="ft-bottom">
-      <span class="ft-copy">© 2026 Luminous Studio.</span>
-      <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      <span class="ft-copy">© 2026 Luminous Studio. All rights reserved.</span>
+      <div class="ft-socials">
+        <a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a>
+      </div>
     </div>
   </div>
 </footer>
 
-<script data-cfasync="false" src=
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function animR(){ rx+=(mx-rx)*.13; ry+=(my-ry)*.13; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(animR); })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+  window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',scrollY>40); });
+  function toggleMobile(){
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+  }
+  const observer = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); }); },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
+
+  function submitForm(){
+    const inputs = document.querySelectorAll('#contactForm .form-input, #contactForm .form-textarea, #contactForm .form-select');
+    const firstName = inputs[0]?.value.trim();
+    const lastName  = inputs[1]?.value.trim();
+    const email     = inputs[2]?.value.trim();
+    const company   = inputs[3]?.value.trim();
+    const service   = inputs[4]?.value;
+    const message   = inputs[5]?.value.trim();
+
+    if(!firstName || !email || !message){
+      [inputs[0], inputs[2], inputs[5]].forEach(f=>{ if(f && !f.value.trim()) f.style.borderColor='var(--gold)'; });
+      if(!document.getElementById('formErr')){
+        const e = document.createElement('p');
+        e.id='formErr';
+        e.style.cssText='font-family:Syne,sans-serif;font-size:.7rem;letter-spacing:.1em;color:var(--gold);margin-top:.5rem;';
+        e.textContent='Please fill in your name, email, and project details.';
+        document.querySelector('.submit-btn').insertAdjacentElement('beforebegin', e);
+      }
+      return;
+    }
+
+    const phone = '2349166819937';
+    const text = [
+      '✦ NEW PROJECT ENQUIRY — Luminous Studio', '',
+      'Name: ' + firstName + ' ' + lastName,
+      'Email: ' + email,
+      company ? 'Company: ' + company : null,
+      service ? 'Service: ' + service : null,
+      '', 'Project Details:', message, '',
+      '— Sent via luminous.studio'
+    ].filter(l=>l!==null).join('\n');
+
+    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+    document.getElementById('contactForm').style.display='none';
+    document.getElementById('formSuccess').classList.add('show');
+  }
+</script>
+</body>
+</html>

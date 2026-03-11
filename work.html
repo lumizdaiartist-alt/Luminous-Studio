@@ -6,138 +6,360 @@
   <title>Work — Luminous Studio</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root {
+      --bg: #0c0c0e;
+      --surface: #141416;
+      --surface2: #1a1a1e;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --text: #f0ede8;
+      --text2: #a09d97;
+      --text3: #5a5855;
+      --white: #faf9f7;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      min-height: 100vh;
+      cursor: none;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cur { width:8px; height:8px; background:var(--gold); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .1s; }
+    .cur-r { width:32px; height:32px; border:1px solid rgba(201,168,76,.4); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all .18s ease; }
+    body.cursor-hover .cur { transform:translate(-50%,-50%) scale(3); background:transparent; border:1px solid var(--gold); }
+    body.cursor-hover .cur-r { transform:translate(-50%,-50%) scale(1.6); border-color:rgba(201,168,76,.7); }
+    @media (pointer:coarse) { .cur,.cur-r { display:none; } body { cursor:auto; } }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:800;
+      padding: 1.6rem 3rem;
+      display: flex; align-items:center; justify-content:space-between;
+      transition: background .4s, border-color .4s, padding .3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(12,12,14,.88);
+      border-color: var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding-top: 1rem; padding-bottom: 1rem;
+    }
+    .logo-wrap { display:flex; align-items:center; gap:.7rem; cursor:none; text-decoration:none; }
+    .logo-svg { width:38px; height:38px; flex-shrink:0; }
+    .logo-text-wrap { display:flex; flex-direction:column; line-height:1; }
+    .logo-name { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:400; letter-spacing:.18em; color:var(--white); text-transform:uppercase; }
+    .logo-name .lum { color:var(--gold); }
+    .logo-sub { font-family:'Syne',sans-serif; font-size:.52rem; letter-spacing:.4em; text-transform:uppercase; color:var(--text3); margin-top:.15rem; }
+    .nav-links { display:flex; gap:2.2rem; list-style:none; }
+    .nav-links a { font-family:'Syne',sans-serif; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text2); text-decoration:none; cursor:none; transition:color .2s; position:relative; padding-bottom:.2rem; }
+    .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--gold); transition:width .25s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+    .nav-btn { font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; background:transparent; border:1px solid var(--gold); color:var(--gold); padding:.6rem 1.6rem; cursor:none; transition:background .2s, color .2s; text-decoration:none; display:inline-block; }
+    .nav-btn:hover { background:var(--gold); color:var(--bg); }
+
+    /* ─── HAMBURGER ─── */
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:none; padding:.2rem; }
+    .hamburger span { display:block; width:24px; height:1px; background:var(--text); transition:all .3s; }
+    .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+    .mobile-menu { display:none; position:fixed; inset:0; z-index:700; background:rgba(12,12,14,.97); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; gap:2.5rem; }
+    .mobile-menu.open { display:flex; animation:pageIn .3s ease; }
+    .mobile-menu a { font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:300; color:var(--text); text-decoration:none; letter-spacing:.08em; cursor:none; transition:color .2s; }
+    .mobile-menu a:hover { color:var(--gold); }
+
+    /* ─── SHARED ─── */
+    .sec { padding: 7rem 0; }
+    .lbl { font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; display:flex; align-items:center; gap:.8rem; }
+    .lbl::before { content:''; width:24px; height:1px; background:var(--gold); flex-shrink:0; }
+    .display-title { font-family:'Cormorant Garamond',serif; font-size:clamp(3rem,7vw,6rem); font-weight:300; line-height:1.05; color:var(--white); }
+    .display-title em { font-style:italic; color:var(--gold-light); }
+    .body-text { font-size:.95rem; line-height:1.9; color:var(--text2); font-weight:300; }
+    .rv { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+    .rv.vis { opacity:1; transform:translateY(0); }
+    .rv-d1 { transition-delay:.1s; }
+    .rv-d2 { transition-delay:.2s; }
+    @keyframes pageIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeU { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ─── PAGE HERO ─── */
+    .pg-hero {
+      padding: 9rem 0 4rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .pg-hero::before {
+      content:'';
+      position:absolute; inset:0;
+      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,168,76,.04) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .pg-hero .display-title { animation: fadeU .9s .2s both; }
+    .pg-hero .lbl { animation: fadeU .7s .1s both; }
+    .pg-hero .body-text { animation: fadeU .8s .35s both; }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar { display:flex; gap:.8rem; flex-wrap:wrap; }
+    .filter-btn { font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; background:transparent; border:1px solid var(--border); color:var(--text2); padding:.55rem 1.4rem; cursor:none; transition:border-color .2s, color .2s, background .2s; }
+    .filter-btn:hover { border-color:var(--gold); color:var(--gold); }
+    .filter-btn.active { border-color:var(--gold); color:var(--bg); background:var(--gold); }
+    .filter-bar { animation: fadeU .8s .5s both; }
+
+    /* ─── PROJECTS GRID ─── */
+    .projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2rem; }
+    .proj-card { cursor:none; overflow:hidden; background:var(--surface); border:1px solid var(--border); transition:border-color .3s; }
+    .proj-card:hover { border-color:var(--border2); }
+    .proj-img { aspect-ratio:16/10; overflow:hidden; position:relative; }
+    .proj-img-inner { width:100%; height:100%; transition:transform .6s ease; }
+    .proj-card:hover .proj-img-inner { transform:scale(1.04); }
+    .proj-info { padding:1.8rem; }
+    .proj-tags { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .proj-tag { font-family:'Syne',sans-serif; font-size:.55rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); background:var(--gold-dim); padding:.25rem .7rem; border:1px solid rgba(201,168,76,.2); }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:400; color:var(--white); margin-bottom:.6rem; }
+    .proj-desc { font-size:.83rem; line-height:1.8; color:var(--text2); }
+    .proj-cta { display:flex; align-items:center; gap:.5rem; margin-top:1.2rem; font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); cursor:none; text-decoration:none; transition:gap .2s; }
+    .proj-cta:hover { gap:1rem; color:var(--gold); }
+
+    /* Project thumb styles */
+    .t1 { background:linear-gradient(140deg,#12100a,#1e1a0e,#14120c); display:flex; align-items:center; justify-content:center; }
+    .t2 { background:linear-gradient(140deg,#0a0e0c,#10160e,#0e1410); display:flex; align-items:center; justify-content:center; }
+    .t3 { background:linear-gradient(140deg,#0e0a14,#16101e,#120e1a); display:flex; align-items:center; justify-content:center; }
+    .t4 { background:linear-gradient(140deg,#100c0a,#1a1210,#14100e); display:flex; align-items:center; justify-content:center; }
+    .wc-dec { display:flex; align-items:center; justify-content:center; opacity:.55; }
+
+    /* ─── CTA BAND ─── */
+    .cta-band { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:5rem 3rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:2rem; }
+    .cta-band-t { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:300; color:var(--white); line-height:1.1; }
+    .cta-band-t em { font-style:italic; color:var(--gold-light); }
+    .btn-dark { font-family:'Syne',sans-serif; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; background:transparent; border:1px solid var(--border2); color:var(--text); padding:.9rem 2.2rem; cursor:none; transition:border-color .2s, color .2s; text-decoration:none; display:inline-block; }
+    .btn-dark:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* ─── FOOTER ─── */
+    footer { background:var(--bg); border-top:1px solid var(--border); padding:1.8rem 0; }
+    .ft-bottom { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .ft-copy { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); }
+    .ft-socials { display:flex; gap:1.5rem; }
+    .ft-socials a { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); text-decoration:none; transition:color .2s; cursor:none; }
+    .ft-socials a:hover { color:var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width:768px) {
+      nav { padding:1.2rem 1.5rem; }
+      .nav-links, .nav-btn { display:none; }
+      .hamburger { display:flex; }
+      .projects-grid { grid-template-columns:1fr; }
+      .cta-band { flex-direction:column; padding:3rem 1.5rem; }
+      .pg-hero { padding: 7rem 0 3rem; }
+    }
+    @media (max-width:480px) {
+      .filter-bar { gap:.5rem; }
+      .filter-btn { padding:.45rem 1rem; font-size:.6rem; }
+    }
+  </style>
 </head>
 <body>
 
 <div class="cur" id="cur"></div>
 <div class="cur-r" id="curR"></div>
 
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="work.html" style="color:var(--gold);">Work</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- NAV -->
 <nav id="navbar">
-  <a class="logo-wrap" href="index.html">
-    <svg class="logo-svg" viewBox="0 0 38 38" fill="none">
-      <circle cx="19" cy="19" r="18" stroke="#c9a84c" stroke-width=".8" opacity=".4"/>
-      <circle cx="19" cy="19" r="12" stroke="#c9a84c" stroke-width=".6" opacity=".25"/>
-      <polygon points="19,7 23,17 34,17 25,23 28,34 19,27 10,34 13,23 4,17 15,17" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".7"/>
-      <circle cx="19" cy="19" r="2.5" fill="#c9a84c"/>
+  <a href="index.html" class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 2L36 19L19 36L2 19Z" stroke="#c9a84c" stroke-width="1" fill="none"/>
+      <path d="M19 8L19 30" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M8 19L30 19" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M11.5 11.5L26.5 26.5" stroke="#c9a84c" stroke-width=".5" opacity=".25"/>
+      <path d="M26.5 11.5L11.5 26.5" stroke="#c9a84c" stroke-width=".5" opacity=".25"/>
+      <circle cx="19" cy="19" r="3.5" fill="#c9a84c" opacity=".9"/>
+      <circle cx="19" cy="19" r="6" stroke="#c9a84c" stroke-width=".6" opacity=".3"/>
+      <circle cx="19" cy="2" r="1.2" fill="#c9a84c" opacity=".7"/>
+      <circle cx="36" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="19" cy="36" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="2" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
     </svg>
     <div class="logo-text-wrap">
-      <span class="logo-name"><span class="lum">Lum</span>inous</span>
-      <span class="logo-sub">Studio</span>
+      <span class="logo-name"><span class="lum">Luminous</span> Studio</span>
+      <span class="logo-sub">Creative Agency</span>
     </div>
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="work.html" class="active">Work</a></li>
-    <li><a href="services.html">Services</a></li>
     <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
-  <a class="nav-btn" href="contact.html">Start a Project</a>
-  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+  <a href="contact.html" class="nav-btn d-none d-md-block">Start a Project</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html"    onclick="closeMobile()">Home</a>
-  <a href="work.html"     onclick="closeMobile()">Work</a>
-  <a href="services.html" onclick="closeMobile()">Services</a>
-  <a href="about.html"    onclick="closeMobile()">About</a>
-  <a href="contact.html"  onclick="closeMobile()">Contact</a>
+<!-- PAGE HERO -->
+<div class="pg-hero">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="lbl">Portfolio</div>
+    <h1 class="display-title">Selected <em>Work</em></h1>
+    <p class="body-text mt-3" style="max-width:500px;">A curated selection of projects across branding, digital design, and motion — each one a collaboration built on trust and craft.</p>
+    <div class="filter-bar mt-4">
+      <button class="filter-btn active" onclick="filterWork(this,'all')">All</button>
+      <button class="filter-btn" onclick="filterWork(this,'branding')">Branding</button>
+      <button class="filter-btn" onclick="filterWork(this,'web')">Web</button>
+      <button class="filter-btn" onclick="filterWork(this,'motion')">Motion</button>
+      <button class="filter-btn" onclick="filterWork(this,'ui')">UI / UX</button>
+    </div>
+  </div>
 </div>
 
-<!-- ═══════════ WORK HEADER ═══════════ -->
-<section class="sec" style="padding-top:9rem;">
+<!-- PROJECTS -->
+<section class="sec">
   <div class="container-fluid px-4 px-md-5">
-    <div class="row mb-5">
-      <div class="col-lg-7">
-        <div class="lbl rv">Portfolio</div>
-        <h1 class="display-title rv rv-d1">Our <em>work</em> speaks<br>for itself</h1>
-      </div>
-      <div class="col-lg-4 offset-lg-1 d-flex align-items-end">
-        <p class="body-text rv rv-d2">Explore projects across brand, digital, and visual production — each built with intention and executed with precision.</p>
-      </div>
-    </div>
+    <div class="projects-grid" id="projectsGrid">
 
-    <!-- Filter Bar -->
-    <div class="filter-bar rv rv-d2">
-      <button class="filter-btn active" onclick="filterWork(this,'all')">All</button>
-      <button class="filter-btn" onclick="filterWork(this,'brand')">Brand</button>
-      <button class="filter-btn" onclick="filterWork(this,'digital')">Digital</button>
-      <button class="filter-btn" onclick="filterWork(this,'visual')">Visual</button>
-      <button class="filter-btn" onclick="filterWork(this,'strategy')">Strategy</button>
-    </div>
+      <div class="proj-card rv" data-cat="branding web">
+        <div class="proj-img"><div class="proj-img-inner t1"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="32" stroke="#c9a84c" stroke-width="0.6"/><circle cx="40" cy="40" r="16" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="4" fill="#c9a84c" opacity=".5"/></svg></div></div></div>
+        <div class="proj-info">
+          <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Web</span></div>
+          <div class="proj-title">Aurelius Collective</div>
+          <p class="proj-desc">A complete brand overhaul and digital presence for a Lagos-based contemporary art collective.</p>
+          <a href="#" class="proj-cta">View Case Study →</a>
+        </div>
+      </div>
 
-    <!-- Project Grid -->
-    <div class="proj-grid">
-      <div class="proj-card rv" data-cat="brand">
-        <div class="proj-img" style="background:linear-gradient(135deg,#1a1a1e,#252528);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="20" stroke="#c9a84c" stroke-width=".8" opacity=".4"/><polygon points="30,14 34,26 47,26 37,34 41,46 30,38 19,46 23,34 13,26 26,26" fill="none" stroke="#c9a84c" stroke-width="1"/></svg>
-        </div>
+      <div class="proj-card rv rv-d1" data-cat="branding">
+        <div class="proj-img"><div class="proj-img-inner t2"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="10" y="10" width="60" height="60" stroke="#c9a84c" stroke-width="0.6"/><rect x="22" y="22" width="36" height="36" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="8" stroke="#c9a84c" stroke-width="0.4"/></svg></div></div></div>
         <div class="proj-info">
-          <div class="proj-cat">Brand Identity</div>
-          <div class="proj-name">Aurelius Collective</div>
+          <div class="proj-tags"><span class="proj-tag">Branding</span></div>
+          <div class="proj-title">Verdant Goods</div>
+          <p class="proj-desc">Earthy, considered brand identity for a sustainable homeware brand entering the European market.</p>
+          <a href="#" class="proj-cta">View Case Study →</a>
         </div>
       </div>
-      <div class="proj-card rv rv-d1" data-cat="digital">
-        <div class="proj-img" style="background:linear-gradient(135deg,#141416,#1e1e22);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="15" width="40" height="30" rx="2" stroke="#c9a84c" stroke-width=".8" opacity=".4"/><polyline points="20,25 27,32 35,24 45,35" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
-        </div>
+
+      <div class="proj-card rv rv-d1" data-cat="ui web">
+        <div class="proj-img"><div class="proj-img-inner t3"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><polygon points="40,6 74,68 6,68" stroke="#c9a84c" stroke-width="0.6" fill="none"/><polygon points="40,22 62,64 18,64" stroke="#c9a84c" stroke-width="0.4" fill="none"/></svg></div></div></div>
         <div class="proj-info">
-          <div class="proj-cat">UI / UX Design</div>
-          <div class="proj-name">Veritas Finance App</div>
+          <div class="proj-tags"><span class="proj-tag">UI / UX</span><span class="proj-tag">Web</span></div>
+          <div class="proj-title">Apex Platform</div>
+          <p class="proj-desc">Full UX strategy and interface design for a B2B financial analytics platform used by 40k+ users.</p>
+          <a href="#" class="proj-cta">View Case Study →</a>
         </div>
       </div>
-      <div class="proj-card rv rv-d2" data-cat="visual">
-        <div class="proj-img" style="background:linear-gradient(135deg,#18181b,#232326);aspect-ratio:21/8;display:flex;align-items:center;justify-content:center;">
-          <svg width="80" height="40" viewBox="0 0 80 40" fill="none"><circle cx="20" cy="20" r="8" stroke="#c9a84c" stroke-width=".8"/><circle cx="40" cy="20" r="12" stroke="#c9a84c" stroke-width=".8"/><circle cx="62" cy="20" r="6" stroke="#c9a84c" stroke-width=".8"/></svg>
-        </div>
+
+      <div class="proj-card rv rv-d2" data-cat="branding web">
+        <div class="proj-img"><div class="proj-img-inner t4"><div class="wc-dec"><svg width="100" height="70" viewBox="0 0 100 70" fill="none"><ellipse cx="50" cy="35" rx="42" ry="24" stroke="#c9a84c" stroke-width="0.6"/><ellipse cx="50" cy="35" rx="22" ry="12" stroke="#c9a84c" stroke-width="0.4"/></svg></div></div></div>
         <div class="proj-info">
-          <div class="proj-cat">Visual Production</div>
-          <div class="proj-name">Noma Campaign 2025</div>
+          <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Web</span></div>
+          <div class="proj-title">Meridian Finance</div>
+          <p class="proj-desc">Premium brand identity and web experience for a boutique investment advisory firm.</p>
+          <a href="#" class="proj-cta">View Case Study →</a>
         </div>
       </div>
-      <div class="proj-card rv" data-cat="brand strategy">
-        <div class="proj-img" style="background:linear-gradient(135deg,#161618,#1e1c20);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="14" y="14" width="32" height="32" stroke="#c9a84c" stroke-width=".8" opacity=".4"/><rect x="20" y="20" width="20" height="20" stroke="#c9a84c" stroke-width=".8"/><rect x="26" y="26" width="8" height="8" fill="#c9a84c" opacity=".4"/></svg>
-        </div>
+
+      <div class="proj-card rv rv-d2" data-cat="motion">
+        <div class="proj-img"><div class="proj-img-inner t1" style="background:linear-gradient(140deg,#100e18,#1c1830,#0e0c18)"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><path d="M40 8 L72 40 L40 72 L8 40Z" stroke="#c9a84c" stroke-width="0.6" fill="none"/><circle cx="40" cy="40" r="14" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="4" fill="#c9a84c" opacity=".4"/></svg></div></div></div>
         <div class="proj-info">
-          <div class="proj-cat">Brand · Strategy</div>
-          <div class="proj-name">Kōsei Wellness</div>
+          <div class="proj-tags"><span class="proj-tag">Motion</span></div>
+          <div class="proj-title">Solstice Brand Film</div>
+          <p class="proj-desc">A 90-second brand anthem film for a luxury skincare company launching in West Africa.</p>
+          <a href="#" class="proj-cta">View Case Study →</a>
         </div>
       </div>
-      <div class="proj-card rv rv-d1" data-cat="digital">
-        <div class="proj-img" style="background:linear-gradient(135deg,#131315,#1b1b1f);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><path d="M10 30 Q30 10 50 30 Q30 50 10 30Z" stroke="#c9a84c" stroke-width=".8" fill="none" opacity=".5"/><circle cx="30" cy="30" r="6" stroke="#c9a84c" stroke-width="1"/></svg>
-        </div>
+
+      <div class="proj-card rv rv-d2" data-cat="branding motion">
+        <div class="proj-img"><div class="proj-img-inner t2" style="background:linear-gradient(140deg,#0a0e10,#10181c,#0e1414)"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="8" y="8" width="64" height="64" stroke="#c9a84c" stroke-width="0.5" rx="2"/><rect x="20" y="20" width="40" height="40" stroke="#c9a84c" stroke-width="0.4" rx="2"/><rect x="32" y="32" width="16" height="16" stroke="#c9a84c" stroke-width="0.4" rx="1"/></svg></div></div></div>
         <div class="proj-info">
-          <div class="proj-cat">Web Design</div>
-          <div class="proj-name">Ossian Architecture</div>
+          <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Motion</span></div>
+          <div class="proj-title">Claré Wellness</div>
+          <p class="proj-desc">Brand identity, packaging design, and animated brand assets for a wellness startup.</p>
+          <a href="#" class="proj-cta">View Case Study →</a>
         </div>
       </div>
-      <div class="proj-card rv rv-d2" data-cat="visual brand">
-        <div class="proj-img" style="background:linear-gradient(135deg,#17151a,#201e24);aspect-ratio:21/8;display:flex;align-items:center;justify-content:center;">
-          <svg width="80" height="40" viewBox="0 0 80 40" fill="none"><line x1="0" y1="20" x2="80" y2="20" stroke="#c9a84c" stroke-width=".4" opacity=".3"/><path d="M10 20 L25 8 L40 20 L55 12 L70 20" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
-        </div>
-        <div class="proj-info">
-          <div class="proj-cat">Visual · Brand</div>
-          <div class="proj-name">Sable Fragrance House</div>
-        </div>
-      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
+<!-- CTA BAND -->
+<div class="cta-band">
+  <div class="cta-band-t">Have a project<br><em>in mind?</em></div>
+  <a href="contact.html" class="btn-dark">Let's Talk →</a>
+</div>
+
 <footer>
   <div class="container-fluid px-4 px-md-5">
     <div class="ft-bottom">
-      <span class="ft-copy">© 2026 Luminous Studio.</span>
-      <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      <span class="ft-copy">© 2026 Luminous Studio. All rights reserved.</span>
+      <div class="ft-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Behance</a>
+      </div>
     </div>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-<script src="main.js"></script>
+<script>
+  // CURSOR
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function animR(){ rx+=(mx-rx)*.13; ry+=(my-ry)*.13; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(animR); })();
+  document.querySelectorAll('a,button,.proj-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+
+  // NAV SCROLL
+  window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',scrollY>40); });
+
+  // MOBILE MENU
+  function toggleMobile(){
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+  }
+
+  // REVEAL
+  const observer = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); }); },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
+
+  // FILTER
+  function filterWork(btn, cat){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.proj-card').forEach(c=>{
+      const cats=c.dataset.cat||'';
+      const show=cat==='all'||cats.includes(cat);
+      c.style.opacity=show?'1':'0.2';
+      c.style.pointerEvents=show?'auto':'none';
+      c.style.transition='opacity .3s';
+    });
+  }
+</script>
 </body>
 </html>
