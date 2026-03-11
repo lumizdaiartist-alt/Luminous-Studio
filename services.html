@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Services — Luminous Studio</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+
+<nav id="navbar">
+  <a class="logo-wrap" href="index.html">
+    <svg class="logo-svg" viewBox="0 0 38 38" fill="none">
+      <circle cx="19" cy="19" r="18" stroke="#c9a84c" stroke-width=".8" opacity=".4"/>
+      <circle cx="19" cy="19" r="12" stroke="#c9a84c" stroke-width=".6" opacity=".25"/>
+      <polygon points="19,7 23,17 34,17 25,23 28,34 19,27 10,34 13,23 4,17 15,17" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".7"/>
+      <circle cx="19" cy="19" r="2.5" fill="#c9a84c"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-name"><span class="lum">Lum</span>inous</span>
+      <span class="logo-sub">Studio</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="services.html" class="active">Services</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a class="nav-btn" href="contact.html">Start a Project</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"    onclick="closeMobile()">Home</a>
+  <a href="work.html"     onclick="closeMobile()">Work</a>
+  <a href="services.html" onclick="closeMobile()">Services</a>
+  <a href="about.html"    onclick="closeMobile()">About</a>
+  <a href="contact.html"  onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ═══════════ SERVICES HEADER ═══════════ -->
+<section class="sec" style="padding-top:9rem;">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="row mb-5">
+      <div class="col-lg-6">
+        <div class="lbl rv">What We Offer</div>
+        <h1 class="display-title rv rv-d1">Services built for<br><em>lasting impact</em></h1>
+      </div>
+      <div class="col-lg-4 offset-lg-2 d-flex align-items-end">
+        <p class="body-text rv rv-d2">We offer a focused suite of creative services, designed to work together for brands that want to stand apart.</p>
+      </div>
+    </div>
+
+    <!-- Services Detail Grid -->
+    <div class="svc-detail-grid rv rv-d2">
+      <div class="svc-detail-item">
+        <div class="svc-detail-icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M20 4l4 12h12l-10 7 4 12-10-7-10 7 4-12L4 16h12z" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
+        </div>
+        <div class="svc-detail-title">Brand Identity</div>
+        <div class="svc-detail-desc">We build brand systems that are strategic, coherent, and visually magnetic. From naming and positioning to logo, typography, color, and brand guidelines — we create identities that grow with you.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Naming</span><span class="svc-tag">Logo Design</span><span class="svc-tag">Typography</span><span class="svc-tag">Color Systems</span><span class="svc-tag">Brand Guidelines</span>
+        </div>
+      </div>
+      <div class="svc-detail-item">
+        <div class="svc-detail-icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="2" stroke="#c9a84c" stroke-width="1" fill="none"/><polyline points="10,24 16,17 22,21 30,13" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
+        </div>
+        <div class="svc-detail-title">Digital Design</div>
+        <div class="svc-detail-desc">Web experiences, apps, and digital products designed with precision. We blend UX thinking with high-craft visual design to create interfaces that are both intuitive and beautiful.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">UI / UX</span><span class="svc-tag">Web Design</span><span class="svc-tag">Prototyping</span><span class="svc-tag">Design Systems</span><span class="svc-tag">Front-End Dev</span>
+        </div>
+      </div>
+      <div class="svc-detail-item">
+        <div class="svc-detail-icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="16" r="8" stroke="#c9a84c" stroke-width="1" fill="none"/><path d="M6 36c0-7.732 6.268-12 14-12s14 4.268 14 12" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>
+        </div>
+        <div class="svc-detail-title">Visual Production</div>
+        <div class="svc-detail-desc">Photography, videography, motion graphics, and creative direction for campaigns and content. We create visual assets that express your brand at the highest level.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Photography</span><span class="svc-tag">Motion Graphics</span><span class="svc-tag">Art Direction</span><span class="svc-tag">Campaign</span><span class="svc-tag">Reels / Video</span>
+        </div>
+      </div>
+      <div class="svc-detail-item">
+        <div class="svc-detail-icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M6 34L20 6l14 28" stroke="#c9a84c" stroke-width="1" fill="none"/><line x1="11" y1="24" x2="29" y2="24" stroke="#c9a84c" stroke-width="1"/></svg>
+        </div>
+        <div class="svc-detail-title">Brand Strategy</div>
+        <div class="svc-detail-desc">Positioning, messaging frameworks, competitive audits, and go-to-market strategy. We give your brand a clear direction and a compelling reason to exist in the minds of your audience.</div>
+        <div class="svc-tags">
+          <span class="svc-tag">Positioning</span><span class="svc-tag">Messaging</span><span class="svc-tag">Audience Research</span><span class="svc-tag">Competitive Audit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ PROCESS ═══════════ -->
+<section class="sec">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="row mb-5">
+      <div class="col-lg-5">
+        <div class="lbl rv">How We Work</div>
+        <h2 class="display-title rv rv-d1">Our <em>process</em></h2>
+      </div>
+    </div>
+    <div class="process-steps rv rv-d2">
+      <div class="ps">
+        <div class="ps-num">01</div>
+        <div class="ps-title">Discover</div>
+        <div class="ps-desc">We dive deep into your brand, market, and audience to understand what really matters — and what gaps exist.</div>
+      </div>
+      <div class="ps">
+        <div class="ps-num">02</div>
+        <div class="ps-title">Define</div>
+        <div class="ps-desc">We align on strategy, positioning, and creative direction before a single pixel is placed.</div>
+      </div>
+      <div class="ps">
+        <div class="ps-num">03</div>
+        <div class="ps-title">Design</div>
+        <div class="ps-desc">We craft the visual and verbal identity with rigor, exploring multiple directions before refining to the definitive solution.</div>
+      </div>
+      <div class="ps">
+        <div class="ps-num">04</div>
+        <div class="ps-title">Deliver</div>
+        <div class="ps-desc">We hand over a complete, production-ready brand system — plus support to launch with confidence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section class="sec">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="row mb-5">
+      <div class="col-lg-5">
+        <div class="lbl rv">Pricing</div>
+        <h2 class="display-title rv rv-d1">Transparent <em>investment</em></h2>
+      </div>
+      <div class="col-lg-5 offset-lg-2 d-flex align-items-end">
+        <p class="body-text rv rv-d2">Every engagement is tailored, but these tiers give you a clear starting point. All prices in USD.</p>
+      </div>
+    </div>
+    <div class="pricing-grid rv rv-d2">
+      <div class="price-card">
+        <div class="price-tier">Essentials</div>
+        <div class="price-amt">$3,500<span>/project</span></div>
+        <div class="price-desc">For early-stage brands needing a clear identity and digital presence.</div>
+        <ul class="price-features">
+          <li>Logo &amp; basic identity</li>
+          <li>Brand colour &amp; typography</li>
+          <li>One-page website</li>
+          <li>Brand guidelines (PDF)</li>
+        </ul>
+        <a class="price-cta" href="contact.html">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-tier">Studio</div>
+        <div class="price-amt">$8,500<span>/project</span></div>
+        <div class="price-desc">Full brand identity and digital experience for growth-stage companies.</div>
+        <ul class="price-features">
+          <li>Full brand system</li>
+          <li>Multi-page website (up to 8 pages)</li>
+          <li>UI/UX for 1 digital product</li>
+          <li>Motion logo &amp; brand assets</li>
+          <li>Comprehensive brand guidelines</li>
+        </ul>
+        <a class="price-cta" href="contact.html">Get Started</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amt">Custom<span> quote</span></div>
+        <div class="price-desc">Ongoing partnership for established brands with complex creative needs.</div>
+        <ul class="price-features">
+          <li>Dedicated creative team</li>
+          <li>Monthly retainer model</li>
+          <li>Full-stack creative + dev</li>
+          <li>Priority turnaround</li>
+          <li>Quarterly brand reviews</li>
+        </ul>
+        <a class="price-cta" href="contact.html">Let's Talk</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="container-fluid px-4 px-md-5">
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 Luminous Studio.</span>
+      <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>About — Luminous Studio</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+
+<nav id="navbar">
+  <a class="logo-wrap" href="index.html">
+    <svg class="logo-svg" viewBox="0 0 38 38" fill="none">
+      <circle cx="19" cy="19" r="18" stroke="#c9a84c" stroke-width=".8" opacity=".4"/>
+      <circle cx="19" cy="19" r="12" stroke="#c9a84c" stroke-width=".6" opacity=".25"/>
+      <polygon points="19,7 23,17 34,17 25,23 28,34 19,27 10,34 13,23 4,17 15,17" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".7"/>
+      <circle cx="19" cy="19" r="2.5" fill="#c9a84c"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-name"><span class="lum">Lum</span>inous</span>
+      <span class="logo-sub">Studio</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a class="nav-btn" href="contact.html">Start a Project</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"    onclick="closeMobile()">Home</a>
+  <a href="work.html"     onclick="closeMobile()">Work</a>
+  <a href="services.html" onclick="closeMobile()">Services</a>
+  <a href="about.html"    onclick="closeMobile()">About</a>
+  <a href="contact.html"  onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ═══════════ ABOUT HEADER ═══════════ -->
+<section class="sec" style="padding-top:9rem;">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="row mb-5">
+      <div class="col-lg-6">
+        <div class="lbl rv">About Us</div>
+        <h1 class="display-title rv rv-d1">We are a studio<br>obsessed with <em>craft</em></h1>
+      </div>
+      <div class="col-lg-4 offset-lg-2 d-flex align-items-end">
+        <p class="body-text rv rv-d2">Founded in 2017, Luminous Studio is a Lagos-based creative agency working at the intersection of strategy, design, and culture.</p>
+      </div>
+    </div>
+
+    <div class="divider rv"></div>
+
+    <!-- ═══════════ STORY ═══════════ -->
+    <div class="row sec">
+      <div class="col-lg-5">
+        <div class="lbl rv">Our Story</div>
+        <h2 class="display-title rv rv-d1" style="font-size:clamp(2.4rem,5vw,4rem);">Built on<br><em>conviction.</em></h2>
+      </div>
+      <div class="col-lg-6 offset-lg-1 rv rv-d2" style="display:flex;flex-direction:column;gap:1.4rem;justify-content:center;padding-top:1rem;">
+        <p class="body-text">Luminous started as a two-person operation in a small studio on the island. We believed — and still believe — that exceptional creative work changes the trajectory of a business. That belief has guided every project we've taken on.</p>
+        <p class="body-text">Today we're a team of twelve creatives, strategists, and developers. Our work has spanned fashion, fintech, architecture, wellness, and culture — always with the same commitment to depth and quality.</p>
+        <p class="body-text">We're selective about our clients. Not because we're precious, but because great work requires genuine partnership.</p>
+      </div>
+    </div>
+
+    <div class="divider rv"></div>
+
+    <!-- ═══════════ VALUES ═══════════ -->
+    <div class="sec">
+      <div class="row mb-5">
+        <div class="col-lg-5">
+          <div class="lbl rv">Our Values</div>
+          <h2 class="display-title rv rv-d1" style="font-size:clamp(2.2rem,4.5vw,3.5rem);">What <em>guides</em> us</h2>
+        </div>
+      </div>
+      <div class="wc-grid">
+        <div class="wc rv">
+          <div class="wc-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="#c9a84c" stroke-width="1" fill="none"/><circle cx="16" cy="16" r="4" fill="#c9a84c" opacity=".4"/></svg>
+          </div>
+          <div class="wc-title">Craft Over Speed</div>
+          <div class="wc-desc">We believe in doing things properly. Every detail is intentional. We'd rather take longer and get it right than rush and get it done.</div>
+        </div>
+        <div class="wc rv rv-d1">
+          <div class="wc-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 26L16 6l10 20" stroke="#c9a84c" stroke-width="1" fill="none"/><line x1="9" y1="19" x2="23" y2="19" stroke="#c9a84c" stroke-width="1"/></svg>
+          </div>
+          <div class="wc-title">Strategy First</div>
+          <div class="wc-desc">Beautiful work without strategic foundation is decoration. We root every design decision in insight and intent.</div>
+        </div>
+        <div class="wc rv rv-d2">
+          <div class="wc-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="20" height="20" stroke="#c9a84c" stroke-width="1" fill="none"/><rect x="10" y="10" width="12" height="12" stroke="#c9a84c" stroke-width=".7" fill="none"/></svg>
+          </div>
+          <div class="wc-title">Honest Partnership</div>
+          <div class="wc-desc">We tell clients what they need to hear, not just what they want to hear. This is what makes the work — and the relationship — last.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider rv"></div>
+
+    <!-- ═══════════ TEAM ═══════════ -->
+    <div class="sec">
+      <div class="row mb-5">
+        <div class="col-lg-5">
+          <div class="lbl rv">The Team</div>
+          <h2 class="display-title rv rv-d1" style="font-size:clamp(2.2rem,4.5vw,3.5rem);">Meet the <em>makers</em></h2>
+        </div>
+      </div>
+      <div class="team-grid">
+        <div class="team-card rv">
+          <div class="team-img-wrap">
+            <div class="team-img" style="background:linear-gradient(160deg,#1e1c22,#2a2730);display:flex;align-items:center;justify-content:center;">
+              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
+            </div>
+          </div>
+          <div class="team-name">Emeka Osei</div>
+          <div class="team-role">Founder · Creative Director</div>
+        </div>
+        <div class="team-card rv rv-d1">
+          <div class="team-img-wrap">
+            <div class="team-img" style="background:linear-gradient(160deg,#1a1c20,#242630);display:flex;align-items:center;justify-content:center;">
+              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
+            </div>
+          </div>
+          <div class="team-name">Tolu Adeyemi</div>
+          <div class="team-role">Head of Strategy</div>
+        </div>
+        <div class="team-card rv rv-d2">
+          <div class="team-img-wrap">
+            <div class="team-img" style="background:linear-gradient(160deg,#1c1a20,#26242e);display:flex;align-items:center;justify-content:center;">
+              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
+            </div>
+          </div>
+          <div class="team-name">Ngozi Eze</div>
+          <div class="team-role">Lead Designer</div>
+        </div>
+        <div class="team-card rv rv-d3">
+          <div class="team-img-wrap">
+            <div class="team-img" style="background:linear-gradient(160deg,#1e1e22,#28262c);display:flex;align-items:center;justify-content:center;">
+              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
+            </div>
+          </div>
+          <div class="team-name">Kelechi Mba</div>
+          <div class="team-role">Tech Lead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="container-fluid px-4 px-md-5">
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 Luminous Studio.</span>
+      <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
