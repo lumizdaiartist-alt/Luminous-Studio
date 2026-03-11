@@ -6,171 +6,743 @@
   <title>About — Luminous Studio</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    :root {
+      --bg: #0c0c0e;
+      --surface: #141416;
+      --surface2: #1a1a1e;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --text: #f0ede8;
+      --text2: #a09d97;
+      --text3: #5a5855;
+      --white: #faf9f7;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cur { width:8px; height:8px; background:var(--gold); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .1s; }
+    .cur-r { width:32px; height:32px; border:1px solid rgba(201,168,76,.4); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all .18s ease; }
+    body.cursor-hover .cur { transform:translate(-50%,-50%) scale(3); background:transparent; border:1px solid var(--gold); }
+    body.cursor-hover .cur-r { transform:translate(-50%,-50%) scale(1.6); border-color:rgba(201,168,76,.7); }
+    @media (pointer:coarse) { .cur,.cur-r { display:none; } body { cursor:auto; } }
+    body { cursor: none; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:800;
+      padding: 1.6rem 3rem;
+      display: flex; align-items:center; justify-content:space-between;
+      transition: background .4s, border-color .4s, padding .3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(12,12,14,.88);
+      border-color: var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding-top: 1rem; padding-bottom: 1rem;
+    }
+
+    .logo-wrap { display:flex; align-items:center; gap:.7rem; cursor:none; text-decoration:none; }
+    .logo-svg { width:38px; height:38px; flex-shrink:0; }
+    .logo-text-wrap { display:flex; flex-direction:column; line-height:1; }
+    .logo-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 400; letter-spacing: .18em;
+      color: var(--white); text-transform: uppercase;
+    }
+    .logo-name .lum { color: var(--gold); }
+    .logo-sub {
+      font-family: 'Syne', sans-serif;
+      font-size: .52rem; letter-spacing: .4em;
+      text-transform: uppercase; color: var(--text3); margin-top: .15rem;
+    }
+
+    .nav-links { display:flex; gap:2.2rem; list-style:none; }
+    .nav-links a {
+      font-family:'Syne', sans-serif; font-size:.72rem; letter-spacing:.15em;
+      text-transform:uppercase; color:var(--text2); text-decoration:none; cursor:none;
+      transition:color .2s; position:relative; padding-bottom:.2rem;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:0; left:0;
+      width:0; height:1px; background:var(--gold); transition:width .25s;
+    }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+
+    .nav-btn {
+      font-family:'Syne',sans-serif; font-size:.68rem;
+      letter-spacing:.18em; text-transform:uppercase;
+      background:transparent; border:1px solid var(--gold);
+      color:var(--gold); padding:.6rem 1.6rem;
+      cursor:none; transition:background .2s, color .2s;
+    }
+    .nav-btn:hover { background:var(--gold); color:var(--bg); }
+
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:none; padding:.2rem; }
+    .hamburger span { display:block; width:24px; height:1px; background:var(--text); transition:all .3s; }
+    .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+
+    .mobile-menu {
+      display:none; position:fixed; inset:0; z-index:700;
+      background:rgba(12,12,14,.97); backdrop-filter:blur(20px);
+      flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
+    }
+    .mobile-menu.open { display:flex; animation:pageIn .3s ease; }
+    .mobile-menu a {
+      font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:300;
+      color:var(--text); text-decoration:none; letter-spacing:.08em; cursor:none;
+      transition:color .2s;
+    }
+    .mobile-menu a:hover { color:var(--gold); }
+
+    @keyframes pageIn {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ─── SHARED ─── */
+    .sec { padding: 7rem 0; }
+    .lbl {
+      font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.3em;
+      text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem;
+      display:flex; align-items:center; gap:.8rem;
+    }
+    .lbl::before { content:''; width:24px; height:1px; background:var(--gold); flex-shrink:0; }
+    .display-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size: clamp(3rem,7vw,6rem);
+      font-weight:300; line-height:1.05; color:var(--white);
+    }
+    .display-title em { font-style:italic; color:var(--gold-light); }
+    .body-text { font-size:.95rem; line-height:1.9; color:var(--text2); font-weight:300; }
+
+    /* Reveal */
+    .rv { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+    .rv.vis { opacity:1; transform:translateY(0); }
+    .rv-d1 { transition-delay:.1s; }
+    .rv-d2 { transition-delay:.2s; }
+    .rv-d3 { transition-delay:.3s; }
+    .rv-d4 { transition-delay:.4s; }
+
+    /* ─── PAGE HERO ─── */
+    .pg-hero {
+      padding: 10rem 0 5rem;
+      position: relative; overflow: hidden;
+    }
+    .pg-hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 80% 40%, rgba(201,168,76,.04) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 10% 70%, rgba(201,168,76,.025) 0%, transparent 55%);
+    }
+    .pg-hero-dots {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 10%, transparent 75%);
+    }
+    .pg-hero-content { position: relative; z-index: 2; }
+    .pg-hero h1 {
+      opacity: 0; animation: fadeU .9s .2s forwards;
+    }
+    .pg-hero .lbl { opacity: 0; animation: fadeU .7s .05s forwards; }
+    .pg-hero p { opacity: 0; animation: fadeU .8s .4s forwards; }
+    .pg-hero-stat-row {
+      display: flex; gap: 3.5rem; flex-wrap: wrap;
+      margin-top: 3.5rem;
+      opacity: 0; animation: fadeU .8s .6s forwards;
+      border-top: 1px solid var(--border); padding-top: 2.5rem;
+    }
+    .pg-stat { }
+    .pg-stat-n {
+      font-family:'Cormorant Garamond',serif;
+      font-size:2.8rem; font-weight:300; color:var(--white); line-height:1;
+    }
+    .pg-stat-n span { color:var(--gold); }
+    .pg-stat-l {
+      font-family:'Syne',sans-serif; font-size:.58rem;
+      letter-spacing:.2em; text-transform:uppercase; color:var(--text3);
+      margin-top:.3rem;
+    }
+
+    @keyframes fadeU {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ─── STORY SECTION ─── */
+    .story-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .story-visual {
+      position: relative; aspect-ratio: 4/5;
+      background: linear-gradient(160deg, #1a1812 0%, #12100a 60%, #0e0d09 100%);
+      overflow: hidden;
+    }
+    .story-visual::after {
+      content: ''; position: absolute;
+      top: 0; right: 0; width: 1px; height: 100%;
+      background: linear-gradient(180deg, transparent, var(--gold), transparent);
+      opacity: .3;
+    }
+    .story-visual-inner {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .story-tag {
+      position: absolute; bottom: 2rem; left: 2rem;
+      font-family:'Syne',sans-serif; font-size:.6rem;
+      letter-spacing:.25em; text-transform:uppercase;
+      color:var(--gold); background:rgba(12,12,14,.8);
+      padding:.5rem 1rem; border:1px solid var(--border2);
+    }
+    .story-year {
+      position: absolute; top: 2rem; right: 2rem;
+      font-family:'Cormorant Garamond',serif; font-size:1rem;
+      color:var(--text3); letter-spacing:.08em;
+    }
+
+    /* ─── VALUES ─── */
+    .values-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .val-item {
+      padding: 2rem 2rem 2rem 0; border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .val-item:nth-child(even) { padding-left: 2rem; border-right: none; }
+    .val-item:nth-child(3), .val-item:nth-child(4) { border-bottom: none; }
+    .val-n {
+      font-family:'Syne',sans-serif; font-size:.58rem; letter-spacing:.2em;
+      text-transform:uppercase; color:var(--gold); opacity:.5; margin-bottom:.7rem;
+    }
+    .val-title {
+      font-family:'Cormorant Garamond',serif; font-size:1.4rem;
+      font-weight:400; color:var(--white); margin-bottom:.5rem;
+    }
+    .val-desc { font-size:.85rem; line-height:1.85; color:var(--text2); }
+
+    /* ─── TEAM ─── */
+    .team-section { background: var(--surface); }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .team-card { cursor: none; }
+    .team-img {
+      aspect-ratio: 3/4; overflow: hidden; margin-bottom: 1.2rem; position: relative;
+    }
+    .team-ph {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .team-ph::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(160deg, transparent 40%, rgba(201,168,76,.06) 100%);
+    }
+    .ph-1 { background: linear-gradient(160deg, #16120a, #221c0e); }
+    .ph-2 { background: linear-gradient(160deg, #0e1210, #141f16); }
+    .ph-3 { background: linear-gradient(160deg, #100e16, #1a1624); }
+    .ph-4 { background: linear-gradient(160deg, #12100e, #1e1a12); }
+    .ph-init {
+      font-family:'Cormorant Garamond',serif; font-size:3rem;
+      font-weight:300; color:rgba(201,168,76,.3);
+      position: relative; z-index: 1;
+    }
+    .team-card-border {
+      position: absolute; inset: 0;
+      border: 1px solid var(--border);
+      transition: border-color .3s;
+      pointer-events: none;
+    }
+    .team-card:hover .team-card-border { border-color: rgba(201,168,76,.25); }
+    .team-name {
+      font-family:'Cormorant Garamond',serif; font-size:1.3rem;
+      font-weight:400; color:var(--white); margin-bottom:.2rem;
+    }
+    .team-role {
+      font-family:'Syne',sans-serif; font-size:.62rem;
+      letter-spacing:.18em; text-transform:uppercase; color:var(--gold);
+    }
+    .team-photo {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; filter: grayscale(20%) contrast(1.05);
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94), filter .4s;
+    }
+    .team-card:hover .team-photo {
+      transform: scale(1.04);
+      filter: grayscale(0%) contrast(1.08);
+    }
+
+    /* ─── MISSION BAND ─── */
+    .mission-band {
+      background: var(--gold-dim);
+      border-top: 1px solid rgba(201,168,76,.2);
+      border-bottom: 1px solid rgba(201,168,76,.2);
+      padding: 4rem 0;
+    }
+    .mission-q {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.6rem,3vw,2.5rem); font-weight:300;
+      font-style: italic; line-height:1.5; color:var(--white);
+      max-width: 820px;
+    }
+    .mission-q strong { font-style:normal; color:var(--gold-light); }
+
+    /* ─── MARQUEE ─── */
+    .marquee-wrap {
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      overflow:hidden; background:var(--surface); padding:.85rem 0;
+    }
+    .mq-track {
+      display:flex; gap:0; white-space:nowrap;
+      animation: mq 28s linear infinite;
+    }
+    .mq-item {
+      font-family:'Cormorant Garamond',serif; font-size:1.1rem;
+      font-weight:300; font-style:italic; color:var(--text3);
+      padding:0 2.5rem; flex-shrink:0;
+      display:flex; align-items:center; gap:2.5rem;
+    }
+    .mq-item::after { content:'·'; color:var(--gold); font-style:normal; }
+    @keyframes mq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* ─── CTA BAND ─── */
+    .cta-band {
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 2rem;
+    }
+    .cta-band-t {
+      font-family:'Cormorant Garamond',serif;
+      font-size: clamp(2rem,4vw,3.2rem); font-weight:300; color:var(--white);
+    }
+    .cta-band-t em { font-style:italic; color:var(--gold-light); }
+    .btn-dark {
+      font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em;
+      text-transform:uppercase; background:transparent; color:var(--text);
+      border:1px solid var(--border2); padding:.9rem 2.2rem; cursor:none;
+      transition:border-color .2s, color .2s;
+    }
+    .btn-dark:hover { border-color:var(--gold); color:var(--gold); }
+    .btn-gold {
+      font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em;
+      text-transform:uppercase; background:var(--gold); color:var(--bg);
+      border:none; padding:.9rem 2.2rem; cursor:none;
+      transition:background .2s, transform .2s;
+    }
+    .btn-gold:hover { background:var(--gold-light); transform:translateY(-1px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 4rem 0 2rem;
+    }
+    .ft-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+      margin-bottom: 3rem; padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .ft-tagline { font-size:.85rem; color:var(--text3); line-height:1.8; margin-top:1.2rem; max-width:240px; }
+    .ft-h { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.25em; text-transform:uppercase; color:var(--text3); margin-bottom:1.2rem; }
+    .ft-links { list-style:none; display:flex; flex-direction:column; gap:.7rem; }
+    .ft-links a { font-size:.85rem; color:var(--text2); text-decoration:none; cursor:none; transition:color .2s; }
+    .ft-links a:hover { color:var(--gold); }
+    .ft-bottom { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .ft-copy { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); }
+    .ft-socials { display:flex; gap:1.8rem; }
+    .ft-socials a { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); text-decoration:none; cursor:none; transition:color .2s; }
+    .ft-socials a:hover { color:var(--gold); }
+    .ft-logo-wrap { display:flex; flex-direction:column; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width:1024px) {
+      .story-grid { grid-template-columns:1fr; gap:3rem; }
+      .story-visual { display:none; }
+      .team-grid { grid-template-columns: repeat(2,1fr); }
+      .ft-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:768px) {
+      nav { padding:1.2rem 1.5rem; }
+      .nav-links, .nav-btn { display:none; }
+      .hamburger { display:flex; }
+      .pg-hero { padding:7rem 0 3rem; }
+      .sec { padding:4rem 0; }
+      .values-grid { grid-template-columns:1fr; }
+      .val-item { border-right:none; }
+      .cta-band { flex-direction:column; padding:3rem 1.5rem; }
+      .ft-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width:480px) {
+      .team-grid { grid-template-columns:1fr 1fr; gap:1rem; }
+      .pg-hero-stat-row { gap:2rem; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- Cursor -->
 <div class="cur" id="cur"></div>
 <div class="cur-r" id="curR"></div>
 
-<nav id="navbar">
-  <a class="logo-wrap" href="index.html">
-    <svg class="logo-svg" viewBox="0 0 38 38" fill="none">
-      <circle cx="19" cy="19" r="18" stroke="#c9a84c" stroke-width=".8" opacity=".4"/>
-      <circle cx="19" cy="19" r="12" stroke="#c9a84c" stroke-width=".6" opacity=".25"/>
-      <polygon points="19,7 23,17 34,17 25,23 28,34 19,27 10,34 13,23 4,17 15,17" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".7"/>
-      <circle cx="19" cy="19" r="2.5" fill="#c9a84c"/>
-    </svg>
-    <div class="logo-text-wrap">
-      <span class="logo-name"><span class="lum">Lum</span>inous</span>
-      <span class="logo-sub">Studio</span>
-    </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="work.html">Work</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="about.html" class="active">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <a class="nav-btn" href="contact.html">Start a Project</a>
-  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
-</nav>
-
+<!-- Mobile menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html"    onclick="closeMobile()">Home</a>
-  <a href="work.html"     onclick="closeMobile()">Work</a>
-  <a href="services.html" onclick="closeMobile()">Services</a>
-  <a href="about.html"    onclick="closeMobile()">About</a>
-  <a href="contact.html"  onclick="closeMobile()">Contact</a>
+  <a href="index.html">Home</a>
+  <a href="#">Work</a>
+  <a href="about.html" style="color:var(--gold)">About</a>
+  <a href="#">Services</a>
+  <a href="#">Contact</a>
 </div>
 
-<!-- ═══════════ ABOUT HEADER ═══════════ -->
-<section class="sec" style="padding-top:9rem;">
+<!-- NAV -->
+<nav id="navbar">
+  <a href="index.html" class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 2L36 19L19 36L2 19Z" stroke="#c9a84c" stroke-width="1" fill="none"/>
+      <path d="M19 8L19 30" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M8 19L30 19" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M11.5 11.5L26.5 26.5" stroke="#c9a84c" stroke-width=".5" opacity=".25"/>
+      <path d="M26.5 11.5L11.5 26.5" stroke="#c9a84c" stroke-width=".5" opacity=".25"/>
+      <circle cx="19" cy="19" r="3.5" fill="#c9a84c" opacity=".9"/>
+      <circle cx="19" cy="19" r="6" stroke="#c9a84c" stroke-width=".6" opacity=".3"/>
+      <circle cx="19" cy="2" r="1.2" fill="#c9a84c" opacity=".7"/>
+      <circle cx="36" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="19" cy="36" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="2" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-name"><span class="lum">Luminous</span> Studio</span>
+      <span class="logo-sub">Creative Agency</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#">Work</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <button class="nav-btn d-none d-md-block">Start a Project</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE HERO                                       -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="pg-hero">
+  <div class="pg-hero-bg"></div>
+  <div class="pg-hero-dots"></div>
+  <div class="container-fluid px-4 px-md-5 pg-hero-content">
+    <div class="lbl">Our Story</div>
+    <h1 class="display-title">Built on <em>craft</em><br>&amp; conviction</h1>
+    <p class="body-text mt-3" style="max-width:560px;">Founded in Lagos in 2019, Luminous Studio began as a two-person operation driven by a belief that African brands deserve world-class creative partners.</p>
+    <div class="pg-hero-stat-row">
+      <div class="pg-stat">
+        <div class="pg-stat-n">94<span>+</span></div>
+        <div class="pg-stat-l">Projects Delivered</div>
+      </div>
+      <div class="pg-stat">
+        <div class="pg-stat-n">7<span>yr</span></div>
+        <div class="pg-stat-l">In the Industry</div>
+      </div>
+      <div class="pg-stat">
+        <div class="pg-stat-n">100<span>%</span></div>
+        <div class="pg-stat-l">Client Retention</div>
+      </div>
+      <div class="pg-stat">
+        <div class="pg-stat-n">Est.<span style="font-size:1.4rem;"> 2019</span></div>
+        <div class="pg-stat-l">Lagos, Nigeria</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="mq-track">
+    <div class="mq-item">Brand Identity</div>
+    <div class="mq-item">Web Design</div>
+    <div class="mq-item">Motion &amp; Film</div>
+    <div class="mq-item">UI / UX</div>
+    <div class="mq-item">Strategy</div>
+    <div class="mq-item">Art Direction</div>
+    <div class="mq-item">Brand Identity</div>
+    <div class="mq-item">Web Design</div>
+    <div class="mq-item">Motion &amp; Film</div>
+    <div class="mq-item">UI / UX</div>
+    <div class="mq-item">Strategy</div>
+    <div class="mq-item">Art Direction</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- THE VISION                                      -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="sec">
   <div class="container-fluid px-4 px-md-5">
-    <div class="row mb-5">
-      <div class="col-lg-6">
-        <div class="lbl rv">About Us</div>
-        <h1 class="display-title rv rv-d1">We are a studio<br>obsessed with <em>craft</em></h1>
+    <div class="story-grid rv">
+      <!-- Decorative visual -->
+      <div class="story-visual">
+        <div class="story-visual-inner">
+          <svg width="180" height="220" viewBox="0 0 180 220" fill="none">
+            <path d="M90 20L160 90L90 200L20 90Z" stroke="#c9a84c" stroke-width="0.7" fill="none" opacity=".4"/>
+            <path d="M90 50L140 100L90 170L40 100Z" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity=".25"/>
+            <circle cx="90" cy="110" r="30" stroke="#c9a84c" stroke-width="0.5" opacity=".3"/>
+            <circle cx="90" cy="110" r="14" stroke="#c9a84c" stroke-width="0.4" opacity=".2"/>
+            <circle cx="90" cy="110" r="4" fill="#c9a84c" opacity=".5"/>
+            <line x1="90" y1="20" x2="90" y2="200" stroke="#c9a84c" stroke-width="0.3" opacity=".15"/>
+            <line x1="20" y1="90" x2="160" y2="90" stroke="#c9a84c" stroke-width="0.3" opacity=".15"/>
+          </svg>
+        </div>
+        <div class="story-tag">Est. Lagos, 2019</div>
+        <div class="story-year">VII Years</div>
       </div>
-      <div class="col-lg-4 offset-lg-2 d-flex align-items-end">
-        <p class="body-text rv rv-d2">Founded in 2017, Luminous Studio is a Lagos-based creative agency working at the intersection of strategy, design, and culture.</p>
-      </div>
-    </div>
 
-    <div class="divider rv"></div>
+      <!-- Text -->
+      <div>
+        <div class="lbl">The Vision</div>
+        <h2 class="display-title">We make the <em>invisible</em> visible</h2>
+        <p class="body-text mt-4">Every brand carries a story that is waiting to be told clearly and beautifully. Our job is to find that truth and express it with intention — across every medium, at every scale.</p>
+        <p class="body-text mt-3">We are a small team by design. Every project receives the full attention of our senior creative team, not handed off to juniors or automated.</p>
 
-    <!-- ═══════════ STORY ═══════════ -->
-    <div class="row sec">
-      <div class="col-lg-5">
-        <div class="lbl rv">Our Story</div>
-        <h2 class="display-title rv rv-d1" style="font-size:clamp(2.4rem,5vw,4rem);">Built on<br><em>conviction.</em></h2>
-      </div>
-      <div class="col-lg-6 offset-lg-1 rv rv-d2" style="display:flex;flex-direction:column;gap:1.4rem;justify-content:center;padding-top:1rem;">
-        <p class="body-text">Luminous started as a two-person operation in a small studio on the island. We believed — and still believe — that exceptional creative work changes the trajectory of a business. That belief has guided every project we've taken on.</p>
-        <p class="body-text">Today we're a team of twelve creatives, strategists, and developers. Our work has spanned fashion, fintech, architecture, wellness, and culture — always with the same commitment to depth and quality.</p>
-        <p class="body-text">We're selective about our clients. Not because we're precious, but because great work requires genuine partnership.</p>
-      </div>
-    </div>
-
-    <div class="divider rv"></div>
-
-    <!-- ═══════════ VALUES ═══════════ -->
-    <div class="sec">
-      <div class="row mb-5">
-        <div class="col-lg-5">
-          <div class="lbl rv">Our Values</div>
-          <h2 class="display-title rv rv-d1" style="font-size:clamp(2.2rem,4.5vw,3.5rem);">What <em>guides</em> us</h2>
-        </div>
-      </div>
-      <div class="wc-grid">
-        <div class="wc rv">
-          <div class="wc-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="#c9a84c" stroke-width="1" fill="none"/><circle cx="16" cy="16" r="4" fill="#c9a84c" opacity=".4"/></svg>
+        <div class="values-grid mt-5">
+          <div class="val-item">
+            <div class="val-n">01</div>
+            <div class="val-title">Craft First</div>
+            <p class="val-desc">We obsess over every detail — kerning, colour, code — because excellence is cumulative.</p>
           </div>
-          <div class="wc-title">Craft Over Speed</div>
-          <div class="wc-desc">We believe in doing things properly. Every detail is intentional. We'd rather take longer and get it right than rush and get it done.</div>
-        </div>
-        <div class="wc rv rv-d1">
-          <div class="wc-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 26L16 6l10 20" stroke="#c9a84c" stroke-width="1" fill="none"/><line x1="9" y1="19" x2="23" y2="19" stroke="#c9a84c" stroke-width="1"/></svg>
+          <div class="val-item">
+            <div class="val-n">02</div>
+            <div class="val-title">Honest Work</div>
+            <p class="val-desc">We tell you what your brand needs, not what is easiest or most profitable for us.</p>
           </div>
-          <div class="wc-title">Strategy First</div>
-          <div class="wc-desc">Beautiful work without strategic foundation is decoration. We root every design decision in insight and intent.</div>
-        </div>
-        <div class="wc rv rv-d2">
-          <div class="wc-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="20" height="20" stroke="#c9a84c" stroke-width="1" fill="none"/><rect x="10" y="10" width="12" height="12" stroke="#c9a84c" stroke-width=".7" fill="none"/></svg>
+          <div class="val-item">
+            <div class="val-n">03</div>
+            <div class="val-title">Long View</div>
+            <p class="val-desc">We design for durability. Trends are reference points, not destinations.</p>
           </div>
-          <div class="wc-title">Honest Partnership</div>
-          <div class="wc-desc">We tell clients what they need to hear, not just what they want to hear. This is what makes the work — and the relationship — last.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider rv"></div>
-
-    <!-- ═══════════ TEAM ═══════════ -->
-    <div class="sec">
-      <div class="row mb-5">
-        <div class="col-lg-5">
-          <div class="lbl rv">The Team</div>
-          <h2 class="display-title rv rv-d1" style="font-size:clamp(2.2rem,4.5vw,3.5rem);">Meet the <em>makers</em></h2>
-        </div>
-      </div>
-      <div class="team-grid">
-        <div class="team-card rv">
-          <div class="team-img-wrap">
-            <div class="team-img" style="background:linear-gradient(160deg,#1e1c22,#2a2730);display:flex;align-items:center;justify-content:center;">
-              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
-            </div>
+          <div class="val-item">
+            <div class="val-n">04</div>
+            <div class="val-title">True Partners</div>
+            <p class="val-desc">We invest in your success long after the brief is delivered.</p>
           </div>
-          <div class="team-name">Emeka Osei</div>
-          <div class="team-role">Founder · Creative Director</div>
-        </div>
-        <div class="team-card rv rv-d1">
-          <div class="team-img-wrap">
-            <div class="team-img" style="background:linear-gradient(160deg,#1a1c20,#242630);display:flex;align-items:center;justify-content:center;">
-              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
-            </div>
-          </div>
-          <div class="team-name">Tolu Adeyemi</div>
-          <div class="team-role">Head of Strategy</div>
-        </div>
-        <div class="team-card rv rv-d2">
-          <div class="team-img-wrap">
-            <div class="team-img" style="background:linear-gradient(160deg,#1c1a20,#26242e);display:flex;align-items:center;justify-content:center;">
-              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
-            </div>
-          </div>
-          <div class="team-name">Ngozi Eze</div>
-          <div class="team-role">Lead Designer</div>
-        </div>
-        <div class="team-card rv rv-d3">
-          <div class="team-img-wrap">
-            <div class="team-img" style="background:linear-gradient(160deg,#1e1e22,#28262c);display:flex;align-items:center;justify-content:center;">
-              <svg width="50" height="60" viewBox="0 0 50 60" fill="none"><circle cx="25" cy="20" r="12" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><path d="M4 56c0-11.598 9.402-18 21-18s21 6.402 21 18" stroke="#c9a84c" stroke-width=".8" opacity=".5" fill="none"/></svg>
-            </div>
-          </div>
-          <div class="team-name">Kelechi Mba</div>
-          <div class="team-role">Tech Lead</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
+<!-- ══════════════════════════════════════════════ -->
+<!-- MISSION BAND                                    -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="mission-band rv">
+  <div class="container-fluid px-4 px-md-5">
+    <blockquote class="mission-q">"A boutique creative studio building brand identities, digital products, and visual stories that <strong>resonate, endure, and inspire.</strong>"</blockquote>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- THE TEAM                                        -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="sec team-section">
+  <div class="container-fluid px-4 px-md-5">
+    <div class="lbl rv">The Team</div>
+    <h2 class="display-title rv rv-d1">The people <em>behind the work</em></h2>
+    <p class="body-text mt-3 rv rv-d2" style="max-width:520px;">A small, senior team means every client gets our best thinking, every time. No juniors, no hand-offs — just dedicated creative partners.</p>
+
+    <div class="team-grid rv rv-d3">
+
+      <!-- Solomon Essian -->
+      <div class="team-card">
+        <div class="team-img">
+          <div class="team-ph ph-1">
+            <span class="ph-init">SE</span>
+          </div>
+          <div class="team-card-border"></div>
+        </div>
+        <div class="team-name">Solomon Essian</div>
+        <div class="team-role">Advertisement Team</div>
+      </div>
+
+      <!-- Esther Abutu -->
+      <div class="team-card">
+        <div class="team-img">
+          <div class="team-ph ph-2">
+            <span class="ph-init">EA</span>
+          </div>
+          <div class="team-card-border"></div>
+        </div>
+        <div class="team-name">Esther Abutu</div>
+        <div class="team-role">Advertisement Team</div>
+      </div>
+
+      <!-- Tabitha -->
+      <div class="team-card">
+        <div class="team-img">
+          <div class="team-ph ph-3">
+            <span class="ph-init">T</span>
+          </div>
+          <div class="team-card-border"></div>
+        </div>
+        <div class="team-name">Tabitha</div>
+        <div class="team-role">Advertisement Team</div>
+      </div>
+
+      <!-- Robinson Treasure -->
+      <div class="team-card">
+        <div class="team-img">
+          <div class="team-ph ph-4">
+            <span class="ph-init">RT</span>
+          </div>
+          <div class="team-card-border"></div>
+        </div>
+        <div class="team-name">Robinson Treasure</div>
+        <div class="team-role">Developer &amp; Founder</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- CTA BAND                                        -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="cta-band rv">
+  <div class="cta-band-t">Ready to build<br><em>something lasting?</em></div>
+  <a href="#" class="btn-gold">Start a Conversation →</a>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- FOOTER                                          -->
+<!-- ══════════════════════════════════════════════ -->
 <footer>
   <div class="container-fluid px-4 px-md-5">
+    <div class="ft-grid">
+      <div class="ft-logo-wrap">
+        <a href="index.html" class="logo-wrap" style="text-decoration:none;">
+          <svg class="logo-svg" viewBox="0 0 38 38" fill="none">
+            <path d="M19 2L36 19L19 36L2 19Z" stroke="#c9a84c" stroke-width="1" fill="none"/>
+            <path d="M19 8L19 30" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+            <path d="M8 19L30 19" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+            <circle cx="19" cy="19" r="3.5" fill="#c9a84c" opacity=".9"/>
+            <circle cx="19" cy="19" r="6" stroke="#c9a84c" stroke-width=".6" opacity=".3"/>
+            <circle cx="19" cy="2" r="1.2" fill="#c9a84c" opacity=".7"/>
+          </svg>
+          <div class="logo-text-wrap">
+            <span class="logo-name"><span class="lum">Luminous</span> Studio</span>
+            <span class="logo-sub">Creative Agency</span>
+          </div>
+        </a>
+        <p class="ft-tagline">A boutique creative studio building brand identities and digital experiences that endure.</p>
+      </div>
+      <div>
+        <div class="ft-h">Navigate</div>
+        <ul class="ft-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#">Work</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#">Services</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-h">Services</div>
+        <ul class="ft-links">
+          <li><a href="#">Brand Identity</a></li>
+          <li><a href="#">Web Design</a></li>
+          <li><a href="#">Motion &amp; Film</a></li>
+          <li><a href="#">UI / UX</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-h">Contact</div>
+        <ul class="ft-links">
+          <li><a href="#">hello@luminous.studio</a></li>
+          <li><a href="#">+234 812 345 6789</a></li>
+          <li><a href="#">Lagos, Nigeria</a></li>
+          <li><a href="#">Start a Project</a></li>
+        </ul>
+      </div>
+    </div>
     <div class="ft-bottom">
-      <span class="ft-copy">© 2026 Luminous Studio.</span>
-      <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      <span class="ft-copy">© 2026 Luminous Studio. All rights reserved.</span>
+      <div class="ft-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Behance</a>
+      </div>
     </div>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-<script src="main.js"></script>
+<script>
+  // ─── CURSOR ───
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function animR(){
+    rx+=(mx-rx)*.13; ry+=(my-ry)*.13;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(animR);
+  })();
+  document.querySelectorAll('a,button,.team-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+
+  // ─── NAV SCROLL ───
+  window.addEventListener('scroll',()=>{
+    document.getElementById('navbar').classList.toggle('scrolled',scrollY>40);
+  });
+
+  // ─── MOBILE MENU ───
+  function toggleMobile(){
+    const m=document.getElementById('mobileMenu');
+    const h=document.getElementById('hamburger');
+    m.classList.toggle('open');
+    h.classList.toggle('open');
+  }
+
+  // ─── REVEAL ───
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('vis');
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
+</script>
 </body>
 </html>
