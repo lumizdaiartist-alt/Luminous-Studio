@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luminous Studio — Creative Agency</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --bg: #0c0c0e;
+      --surface: #141416;
+      --surface2: #1a1a1e;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --text: #f0ede8;
+      --text2: #a09d97;
+      --text3: #5a5855;
+      --white: #faf9f7;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── PAGE SYSTEM ─── */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; animation: pageIn 0.5s ease forwards; }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cur { width:8px; height:8px; background:var(--gold); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .1s; }
+    .cur-r { width:32px; height:32px; border:1px solid rgba(201,168,76,.4); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all .18s ease; }
+    body.cursor-hover .cur { transform:translate(-50%,-50%) scale(3); background:transparent; border:1px solid var(--gold); }
+    body.cursor-hover .cur-r { transform:translate(-50%,-50%) scale(1.6); border-color:rgba(201,168,76,.7); }
+    @media (pointer:coarse) { .cur,.cur-r { display:none; } body { cursor:auto; } }
+    body { cursor: none; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:800;
+      padding: 1.6rem 3rem;
+      display: flex; align-items:center; justify-content:space-between;
+      transition: background .4s, border-color .4s, padding .3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(12,12,14,.88);
+      border-color: var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding-top: 1rem; padding-bottom: 1rem;
+    }
+
+    /* SVG LOGO */
+    .logo-wrap { display:flex; align-items:center; gap:.7rem; cursor:none; text-decoration:none; }
+    .logo-svg { width:38px; height:38px; flex-shrink:0; }
+    .logo-text-wrap { display:flex; flex-direction:column; line-height:1; }
+    .logo-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: .18em;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+    .logo-name .lum { color: var(--gold); }
+    .logo-sub {
+      font-family: 'Syne', sans-serif;
+      font-size: .52rem;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-top: .15rem;
+    }
+
+    .nav-links { display:flex; gap:2.2rem; list-style:none; }
+    .nav-links a {
+      font-family:'Syne', sans-serif;
+      font-size:.72rem; letter-spacing:.15em;
+      text-transform:uppercase; color:var(--text2);
+      text-decoration:none; cursor:none;
+      transition:color .2s;
+      position:relative;
+      padding-bottom:.2rem;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:0; left:0;
+      width:0; height:1px; background:var(--gold);
+      transition:width .25s;
+    }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+
+    .nav-btn {
+      font-family:'Syne',sans-serif; font-size:.68rem;
+      letter-spacing:.18em; text-transform:uppercase;
+      background:transparent; border:1px solid var(--gold);
+      color:var(--gold); padding:.6rem 1.6rem;
+      cursor:none; transition:background .2s, color .2s;
+    }
+    .nav-btn:hover { background:var(--gold); color:var(--bg); }
+
+    /* ─── HAMBURGER (mobile) ─── */
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:none; padding:.2rem; }
+    .hamburger span { display:block; width:24px; height:1px; background:var(--text); transition:all .3s; }
+    .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+
+    .mobile-menu {
+      display:none; position:fixed; inset:0; z-index:700;
+      background:rgba(12,12,14,.97); backdrop-filter:blur(20px);
+      flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
+    }
+    .mobile-menu.open { display:flex; animation:pageIn .3s ease; }
+    .mobile-menu a {
+      font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:300;
+      color:var(--text); text-decoration:none; letter-spacing:.08em; cursor:none;
+      transition:color .2s;
+    }
+    .mobile-menu a:hover { color:var(--gold); }
+
+    /* ─── SECTIONS SHARED ─── */
+    .sec { padding: 7rem 0; }
+    .sec-sm { padding: 4rem 0; }
+    .lbl {
+      font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.3em;
+      text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem;
+      display:flex; align-items:center; gap:.8rem;
+    }
+    .lbl::before { content:''; width:24px; height:1px; background:var(--gold); flex-shrink:0; }
+    .display-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size: clamp(3rem,7vw,6rem);
+      font-weight:300; line-height:1.05;
+      color:var(--white);
+    }
+    .display-title em { font-style:italic; color:var(--gold-light); }
+    .body-text { font-size:.95rem; line-height:1.9; color:var(--text2); font-weight:300; }
+    .divider { width:100%; height:1px; background:var(--border); }
+
+    /* Reveal */
+    .rv { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+    .rv.vis { opacity:1; transform:translateY(0); }
+    .rv-d1 { transition-delay:.1s; }
+    .rv-d2 { transition-delay:.2s; }
+    .rv-d3 { transition-delay:.3s; }
+    .rv-d4 { transition-delay:.4s; }
+
+    /* ─── HOME PAGE ─── */
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display:flex; align-items:center;
+      position:relative; overflow:hidden;
+      padding: 7rem 3rem 4rem;
+    }
+    .hero-bg {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 70% 60% at 70% 50%, rgba(201,168,76,.055) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 80% at 10% 80%, rgba(201,168,76,.03) 0%, transparent 60%);
+    }
+    /* Subtle dot grid */
+    .hero-dots {
+      position:absolute; inset:0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(ellipse 80% 70% at 60% 50%, black 20%, transparent 80%);
+    }
+    .hero-content { position:relative; z-index:2; max-width:700px; }
+    .hero-eyebrow {
+      font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.35em;
+      text-transform:uppercase; color:var(--gold);
+      margin-bottom:2.2rem;
+      display:flex; align-items:center; gap:1rem;
+      opacity:0; animation:fadeU .8s .2s forwards;
+    }
+    .hero-eyebrow::before { content:''; width:36px; height:1px; background:var(--gold); }
+    .hero-h1 {
+      font-family:'Cormorant Garamond',serif;
+      font-size: clamp(3.8rem, 9vw, 7.5rem);
+      font-weight:300; line-height:.97;
+      color:var(--white); margin-bottom:2rem;
+      opacity:0; animation:fadeU .9s .35s forwards;
+    }
+    .hero-h1 em { font-style:italic; color:var(--gold-light); display:block; }
+    .hero-p {
+      max-width:420px; font-size:1rem; line-height:1.85;
+      color:var(--text2); font-weight:300; margin-bottom:3rem;
+      opacity:0; animation:fadeU .8s .55s forwards;
+    }
+    .hero-btns {
+      display:flex; gap:1.2rem; flex-wrap:wrap;
+      opacity:0; animation:fadeU .8s .7s forwards;
+    }
+    .btn-gold {
+      font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em;
+      text-transform:uppercase; background:var(--gold); color:var(--bg);
+      border:none; padding:.9rem 2.2rem; cursor:none;
+      transition:background .2s, transform .2s;
+    }
+    .btn-gold:hover { background:var(--gold-light); transform:translateY(-1px); }
+    .btn-outline {
+      font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em;
+      text-transform:uppercase; background:transparent; color:var(--text);
+      border:1px solid var(--border2); padding:.9rem 2.2rem; cursor:none;
+      text-decoration:none; display:inline-flex; align-items:center; gap:.6rem;
+      transition:border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* hero aside stats */
+    .hero-aside {
+      position:absolute; right:3rem; bottom:4rem; z-index:2;
+      display:flex; gap:3rem;
+      opacity:0; animation:fadeU .8s .9s forwards;
+    }
+    .h-stat { text-align:center; }
+    .h-stat-n {
+      font-family:'Cormorant Garamond',serif;
+      font-size:2.8rem; font-weight:300; color:var(--white); line-height:1;
+    }
+    .h-stat-n span { color:var(--gold); }
+    .h-stat-l {
+      font-family:'Syne',sans-serif; font-size:.58rem;
+      letter-spacing:.2em; text-transform:uppercase; color:var(--text3);
+      margin-top:.3rem;
+    }
+
+    @keyframes fadeU {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* scroll hint */
+    .scroll-hint {
+      position:absolute; bottom:2.5rem; left:3rem; z-index:2;
+      font-family:'Syne',sans-serif; font-size:.58rem;
+      letter-spacing:.25em; text-transform:uppercase; color:var(--text3);
+      display:flex; align-items:center; gap:.8rem;
+      opacity:0; animation:fadeU .7s 1.2s forwards;
+    }
+    .scroll-bar { width:36px; height:1px; background:var(--text3); position:relative; overflow:hidden; }
+    .scroll-bar::after {
+      content:''; position:absolute; left:-100%; top:0;
+      width:100%; height:100%; background:var(--gold);
+      animation:sbar 2.2s ease-in-out infinite;
+    }
+    @keyframes sbar { 0%{left:-100%} 100%{left:100%} }
+
+    /* Marquee */
+    .marquee-wrap {
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      overflow:hidden; background:var(--surface); padding:.85rem 0;
+    }
+    .mq-track {
+      display:flex; gap:0; white-space:nowrap;
+      animation: mq 28s linear infinite;
+    }
+    .mq-item {
+      font-family:'Cormorant Garamond',serif; font-size:1.1rem;
+      font-weight:300; font-style:italic; color:var(--text3);
+      padding:0 2.5rem; flex-shrink:0;
+      display:flex; align-items:center; gap:2.5rem;
+    }
+    .mq-item::after { content:'·'; color:var(--gold); font-style:normal; }
+    @keyframes mq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* About strip */
+    .about-strip { background:var(--surface); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .about-visual {
+      position:relative; aspect-ratio:4/5;
+      background: linear-gradient(160deg, #1a1812 0%, #12100a 60%, #0e0d09 100%);
+      overflow:hidden;
+    }
+    .about-visual-inner {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .about-visual::after {
+      content:''; position:absolute;
+      top:0; right:0; width:1px; height:100%;
+      background:linear-gradient(180deg, transparent, var(--gold), transparent);
+      opacity:.3;
+    }
+    .about-tag {
+      position:absolute; bottom:2rem; left:2rem;
+      font-family:'Syne',sans-serif; font-size:.6rem;
+      letter-spacing:.25em; text-transform:uppercase;
+      color:var(--gold); background:rgba(12,12,14,.8);
+      padding:.5rem 1rem; border:1px solid var(--border2);
+    }
+
+    /* Services */
+    .svc-row {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      border-top:1px solid var(--border);
+    }
+    .svc-card {
+      padding:2.8rem 2.2rem; border-right:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      cursor:none; transition:background .3s;
+      position:relative; overflow:hidden;
+    }
+    .svc-card:last-child { border-right:none; }
+    .svc-card::before {
+      content:''; position:absolute; bottom:0; left:0;
+      width:0; height:2px; background:var(--gold);
+      transition:width .4s;
+    }
+    .svc-card:hover { background:var(--surface2); }
+    .svc-card:hover::before { width:100%; }
+    .svc-n {
+      font-family:'Syne',sans-serif; font-size:.58rem;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:1.5rem; opacity:.6;
+    }
+    .svc-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.7rem; font-weight:400; color:var(--white);
+      margin-bottom:1rem; line-height:1.2;
+    }
+    .svc-desc { font-size:.85rem; line-height:1.85; color:var(--text2); }
+
+    /* Work grid */
+    .work-bento { display:grid; grid-template-columns:repeat(12,1fr); gap:1.2rem; margin-top:3.5rem; }
+    .wc { position:relative; overflow:hidden; cursor:none; background:var(--surface); }
+    .wc:nth-child(1) { grid-column:span 7; }
+    .wc:nth-child(2) { grid-column:span 5; }
+    .wc:nth-child(3) { grid-column:span 5; }
+    .wc:nth-child(4) { grid-column:span 7; }
+    .wc-img { aspect-ratio:16/10; overflow:hidden; position:relative; }
+    .wc-img-inner { width:100%; height:100%; transition:transform .7s cubic-bezier(.25,.46,.45,.94); }
+    .wc:hover .wc-img-inner { transform:scale(1.04); }
+    /* Decorative project thumbs */
+    .t1 { background:linear-gradient(135deg,#16120a 0%,#221c0e 40%,#1a1508 100%); }
+    .t2 { background:linear-gradient(160deg,#0e1210 0%,#141f16 50%,#0c1510 100%); }
+    .t3 { background:linear-gradient(140deg,#100e16 0%,#1a1624 50%,#0e0c14 100%); }
+    .t4 { background:linear-gradient(150deg,#12100e 0%,#1e1a12 50%,#161208 100%); }
+    .wc-dec { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:.18; }
+    .wc-info { padding:1.2rem 1.4rem; display:flex; justify-content:space-between; align-items:center; }
+    .wc-tag { font-family:'Syne',sans-serif; font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:.3rem; }
+    .wc-name { font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:400; color:var(--white); }
+    .wc-arr {
+      width:32px; height:32px; border:1px solid var(--border2);
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:all .25s;
+    }
+    .wc:hover .wc-arr { background:var(--gold); border-color:var(--gold); }
+    .wc:hover .wc-arr path { stroke:var(--bg); }
+
+    /* Testimonial */
+    .test-section { background:var(--surface); }
+    .test-inner { max-width:780px; }
+    .test-q {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.5rem,3vw,2.3rem); font-weight:300;
+      line-height:1.55; color:var(--white); margin-bottom:2.5rem;
+    }
+    .test-q strong { color:var(--gold-light); font-weight:400; }
+    .test-author { display:flex; align-items:center; gap:1.2rem; }
+    .test-av {
+      width:44px; height:44px; border-radius:50%;
+      background:linear-gradient(135deg, var(--gold-dim), rgba(201,168,76,.3));
+      border:1px solid var(--gold);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Syne',sans-serif; font-size:.7rem; color:var(--gold);
+    }
+    .test-name { font-family:'Syne',sans-serif; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--text); margin-bottom:.2rem; }
+    .test-role { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.1em; color:var(--text3); }
+
+    /* CTA band */
+    .cta-band {
+      background:var(--gold); padding:4.5rem 3rem;
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:2rem;
+    }
+    .cta-band-t {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,5vw,3.5rem); font-weight:300;
+      color:var(--bg); line-height:1.1;
+    }
+    .cta-band-t em { font-style:italic; }
+    .btn-dark {
+      font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.18em;
+      text-transform:uppercase; background:var(--bg); color:var(--gold);
+      border:none; padding:.9rem 2.2rem; cursor:none; flex-shrink:0;
+      transition:background .2s, color .2s;
+    }
+    .btn-dark:hover { background:var(--surface); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background:var(--surface); padding:4rem 3rem 2rem;
+      border-top:1px solid var(--border);
+    }
+    .ft-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; padding-bottom:3rem; border-bottom:1px solid var(--border); margin-bottom:2rem; }
+    .ft-logo-wrap { display:flex; flex-direction:column; gap:1rem; }
+    .ft-tagline { font-size:.85rem; line-height:1.8; color:var(--text3); max-width:260px; }
+    .ft-h { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; }
+    .ft-links { list-style:none; display:flex; flex-direction:column; gap:.7rem; }
+    .ft-links a { font-size:.85rem; color:var(--text2); text-decoration:none; cursor:none; transition:color .2s; }
+    .ft-links a:hover { color:var(--gold); }
+    .ft-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+    .ft-copy { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--text3); }
+    .ft-socials { display:flex; gap:1.5rem; }
+    .ft-socials a { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--text3); text-decoration:none; cursor:none; transition:color .2s; }
+    .ft-socials a:hover { color:var(--gold); }
+
+    /* ─── WORK PAGE ─── */
+    .pg-hero {
+      padding:10rem 3rem 5rem;
+      background:linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+      border-bottom:1px solid var(--border);
+    }
+    .filter-bar {
+      display:flex; gap:1rem; flex-wrap:wrap; margin-top:3rem;
+    }
+    .filter-btn {
+      font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.18em;
+      text-transform:uppercase; background:transparent;
+      border:1px solid var(--border); color:var(--text2);
+      padding:.55rem 1.4rem; cursor:none; transition:all .2s;
+    }
+    .filter-btn.active, .filter-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+
+    .projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2rem; margin-top:4rem; }
+    .proj-card { cursor:none; overflow:hidden; background:var(--surface); border:1px solid var(--border); }
+    .proj-img { aspect-ratio:16/10; overflow:hidden; position:relative; }
+    .proj-img-inner { width:100%; height:100%; transition:transform .6s ease; }
+    .proj-card:hover .proj-img-inner { transform:scale(1.04); }
+    .proj-info { padding:1.8rem; }
+    .proj-tags { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .proj-tag { font-family:'Syne',sans-serif; font-size:.55rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); background:var(--gold-dim); padding:.25rem .7rem; border:1px solid rgba(201,168,76,.2); }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:400; color:var(--white); margin-bottom:.6rem; }
+    .proj-desc { font-size:.83rem; line-height:1.8; color:var(--text2); }
+    .proj-cta { display:flex; align-items:center; gap:.5rem; margin-top:1.2rem; font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); cursor:none; text-decoration:none; transition:gap .2s; }
+    .proj-cta:hover { gap:1rem; color:var(--gold); }
+
+    /* ─── ABOUT PAGE ─── */
+    .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-top:4rem; }
+    .team-card { cursor:none; }
+    .team-img {
+      aspect-ratio:3/4; overflow:hidden; margin-bottom:1.2rem;
+      position:relative;
+    }
+    .team-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+    .ph-1 { background:linear-gradient(160deg,#16120a,#221c0e); }
+    .ph-2 { background:linear-gradient(160deg,#0e1210,#141f16); }
+    .ph-3 { background:linear-gradient(160deg,#100e16,#1a1624); }
+    .ph-4 { background:linear-gradient(160deg,#12100e,#1e1a12); }
+    .ph-5 { background:linear-gradient(160deg,#0e1214,#12181e); }
+    .ph-6 { background:linear-gradient(160deg,#140e0e,#201412); }
+    .ph-init { font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:300; color:rgba(201,168,76,.3); }
+    .team-name { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:400; color:var(--white); margin-bottom:.2rem; }
+    .team-role { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); }
+
+    .values-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0; border:1px solid var(--border); margin-top:4rem; }
+    .val-item { padding:3rem; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .val-item:nth-child(even) { border-right:none; }
+    .val-item:nth-last-child(-n+2) { border-bottom:none; }
+    .val-n { font-family:'Cormorant Garamond',serif; font-size:4rem; font-weight:300; color:transparent; -webkit-text-stroke:1px rgba(201,168,76,.2); line-height:1; margin-bottom:1rem; }
+    .val-title { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:400; color:var(--white); margin-bottom:.8rem; }
+    .val-desc { font-size:.85rem; line-height:1.85; color:var(--text2); }
+
+    /* ─── SERVICES PAGE ─── */
+    .svc-detail-list { margin-top:4rem; }
+    .svc-detail-item {
+      display:grid; grid-template-columns:60px 1fr 280px;
+      align-items:start; gap:2.5rem; padding:2.8rem 0;
+      border-bottom:1px solid var(--border); cursor:none;
+      transition:padding-left .3s;
+    }
+    .svc-detail-item:first-child { border-top:1px solid var(--border); }
+    .svc-detail-item:hover { padding-left:.8rem; }
+    .sd-n { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-weight:300; color:transparent; -webkit-text-stroke:1px rgba(201,168,76,.2); line-height:1; }
+    .sd-main .sd-title { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:400; color:var(--white); margin-bottom:.8rem; line-height:1; }
+    .sd-main .sd-desc { font-size:.88rem; line-height:1.85; color:var(--text2); }
+    .sd-features { display:flex; flex-direction:column; gap:.6rem; }
+    .sd-feat { font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.1em; color:var(--text2); display:flex; align-items:center; gap:.6rem; }
+    .sd-feat::before { content:''; width:4px; height:4px; background:var(--gold); border-radius:50%; flex-shrink:0; }
+
+    .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4rem; }
+    .price-card { padding:2.5rem; border:1px solid var(--border); position:relative; background:var(--surface); }
+    .price-card.featured { border-color:var(--gold); background:var(--surface2); }
+    .price-badge { position:absolute; top:-1px; left:50%; transform:translateX(-50%); background:var(--gold); padding:.25rem 1.2rem; font-family:'Syne',sans-serif; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--bg); white-space:nowrap; }
+    .price-tier { font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
+    .price-amount { font-family:'Cormorant Garamond',serif; font-size:3.5rem; font-weight:300; color:var(--white); line-height:1; margin-bottom:.3rem; }
+    .price-amount span { font-size:1.2rem; vertical-align:super; }
+    .price-period { font-size:.8rem; color:var(--text3); margin-bottom:2rem; }
+    .price-features { list-style:none; display:flex; flex-direction:column; gap:.8rem; margin-bottom:2rem; }
+    .price-features li { font-size:.85rem; color:var(--text2); display:flex; align-items:center; gap:.7rem; }
+    .price-features li::before { content:''; width:5px; height:5px; background:var(--gold); border-radius:50%; flex-shrink:0; opacity:.5; }
+    .price-card.featured .price-features li::before { opacity:1; }
+
+    /* ─── CONTACT PAGE ─── */
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start; }
+    .contact-info { display:flex; flex-direction:column; gap:2.5rem; }
+    .ci-item { border-left:2px solid var(--gold-dim); padding-left:1.5rem; }
+    .ci-label { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); margin-bottom:.4rem; }
+    .ci-val { font-size:.95rem; color:var(--text); }
+
+    .contact-form { display:flex; flex-direction:column; gap:1.2rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+    .form-group { display:flex; flex-direction:column; gap:.5rem; }
+    .form-label { font-family:'Syne',sans-serif; font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--text3); }
+    .form-input, .form-textarea {
+      background:var(--surface); border:1px solid var(--border);
+      color:var(--text); padding:.9rem 1.2rem;
+      font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:300;
+      outline:none; transition:border-color .2s; width:100%;
+    }
+    .form-input:focus, .form-textarea:focus { border-color:var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color:var(--text3); }
+    .form-textarea { resize:vertical; min-height:140px; }
+    .form-select {
+      background:var(--surface); border:1px solid var(--border);
+      color:var(--text2); padding:.9rem 1.2rem;
+      font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:300;
+      outline:none; transition:border-color .2s; width:100%;
+      appearance:none; cursor:none;
+    }
+    .form-select:focus { border-color:var(--gold); color:var(--text); }
+    .form-select option { background:var(--surface); }
+
+    .submit-btn {
+      font-family:'Syne',sans-serif; font-size:.7rem; letter-spacing:.2em;
+      text-transform:uppercase; background:var(--gold); color:var(--bg);
+      border:none; padding:1.1rem 2.5rem; cursor:none;
+      transition:background .2s; align-self:flex-start;
+    }
+    .submit-btn:hover { background:var(--gold-light); }
+    .form-success { display:none; padding:2rem; border:1px solid var(--gold); background:var(--gold-dim); text-align:center; }
+    .form-success.show { display:block; animation:pageIn .4s ease; }
+    .form-success p { font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold-light); }
+
+    /* map-like graphic */
+    .contact-map {
+      height:220px; background:var(--surface2);
+      border:1px solid var(--border); display:flex;
+      align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+    }
+    .map-grid {
+      position:absolute; inset:0;
+      background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+      background-size:30px 30px;
+    }
+    .map-dot {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+    }
+    .map-dot-core { width:10px; height:10px; background:var(--gold); border-radius:50%; }
+    .map-dot-ring {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:10px; height:10px;
+      border:1px solid var(--gold); border-radius:50%;
+      animation:ping 2s ease-out infinite;
+    }
+    @keyframes ping { 0%{width:10px;height:10px;opacity:1} 100%{width:80px;height:80px;opacity:0} }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width:1024px) {
+      .svc-row { grid-template-columns:repeat(2,1fr); }
+      .ft-grid { grid-template-columns:1fr 1fr; }
+      .svc-detail-item { grid-template-columns:40px 1fr; }
+      .sd-features { display:none; }
+    }
+    @media (max-width:768px) {
+      nav { padding:1.2rem 1.5rem; }
+      .nav-links, .nav-btn { display:none; }
+      .hamburger { display:flex; }
+      .hero { padding:6rem 1.5rem 3rem; }
+      .hero-aside { display:none; }
+      .sec { padding:4.5rem 0; }
+      .about-grid { grid-template-columns:1fr; }
+      .about-visual { display:none; }
+      .svc-row { grid-template-columns:1fr; }
+      .work-bento .wc { grid-column:span 12 !important; }
+      .projects-grid { grid-template-columns:1fr; }
+      .team-grid { grid-template-columns:1fr 1fr; }
+      .values-grid { grid-template-columns:1fr; }
+      .val-item { border-right:none; }
+      .contact-grid { grid-template-columns:1fr; gap:3rem; }
+      .form-row { grid-template-columns:1fr; }
+      .pricing-grid { grid-template-columns:1fr; }
+      .ft-grid { grid-template-columns:1fr; }
+      .pg-hero { padding:7rem 1.5rem 3rem; }
+      .cta-band { flex-direction:column; }
+    }
+    /* ─── HERO VISUAL ─── */
+    .hero-visual-outer {
+      position: absolute;
+      right: 7%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 320px; height: 320px;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeU .9s 1.1s forwards;
+      flex-shrink: 0;
+    }
+    /* The visible circle — everything clipped inside */
+    .hero-visual-circle {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,.22);
+      background: radial-gradient(ellipse 80% 80% at 50% 50%,
+        rgba(201,168,76,.06) 0%,
+        rgba(201,168,76,.02) 40%,
+        transparent 70%);
+      box-shadow: 0 0 60px rgba(201,168,76,.07), inset 0 0 40px rgba(201,168,76,.04);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Orbiting rings — all contained */
+    .hv-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(201,168,76,.1);
+      pointer-events: none;
+    }
+    .hv-ring-1 { width: 92%; height: 92%; animation: hvSpin 22s linear infinite; }
+    .hv-ring-2 { width: 68%; height: 68%; border-color: rgba(201,168,76,.16); animation: hvSpin 16s linear infinite reverse; }
+    .hv-ring-3 { width: 44%; height: 44%; border-color: rgba(201,168,76,.08); animation: hvSpin 30s linear infinite; }
+    @keyframes hvSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    /* Orbiting dot on ring-1 */
+    .hv-orb {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 4%; left: 50%;
+      transform: translateX(-50%);
+      opacity: .8;
+      box-shadow: 0 0 8px rgba(201,168,76,.6);
+    }
+
+    /* Icon container */
+    .hv-icon-wrap {
+      position: relative;
+      width: 110px; height: 110px;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .hv-icon {
+      position: absolute;
+      width: 88px; height: 88px;
+      opacity: 0;
+      transform: scale(.65) rotate(-8deg);
+      transition: opacity .65s ease, transform .65s cubic-bezier(.34,1.3,.64,1);
+      filter: drop-shadow(0 0 22px rgba(201,168,76,.5));
+    }
+    .hv-icon.active {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    /* Label + dots below icon, inside circle */
+    .hv-meta {
+      position: absolute;
+      bottom: 38px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      z-index: 2;
+    }
+    .hv-label {
+      font-family: 'Syne', sans-serif;
+      font-size: .58rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: .65;
+      transition: opacity .3s;
+    }
+    .hv-dots { display: flex; gap: 6px; }
+    .hv-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(201,168,76,.25);
+      transition: background .3s, transform .3s;
+    }
+    .hv-dot.active { background: var(--gold); transform: scale(1.4); }
+
+    @media (max-width: 1100px) { .hero-visual-outer { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="nav('home');closeMobile()">Home</a>
+  <a href="#" onclick="nav('work');closeMobile()">Work</a>
+  <a href="#" onclick="nav('about');closeMobile()">About</a>
+  <a href="#" onclick="nav('services');closeMobile()">Services</a>
+  <a href="#" onclick="nav('contact');closeMobile()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo-wrap" onclick="nav('home');return false;">
+    <!-- Custom SVG Logo Mark -->
+    <svg class="logo-svg" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer diamond -->
+      <path d="M19 2L36 19L19 36L2 19Z" stroke="#c9a84c" stroke-width="1" fill="none"/>
+      <!-- Inner rays -->
+      <path d="M19 8L19 30" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M8 19L30 19" stroke="#c9a84c" stroke-width=".6" opacity=".4"/>
+      <path d="M11.5 11.5L26.5 26.5" stroke="#c9a84c" stroke-width=".5" opacity=".25"/>
+      <path d="M26.5 11.5L11.5 26.5" stroke="#c9a84c" stroke-width=".5" opacity=".25"/>
+      <!-- Core circle with glow -->
+      <circle cx="19" cy="19" r="3.5" fill="#c9a84c" opacity=".9"/>
+      <circle cx="19" cy="19" r="6" stroke="#c9a84c" stroke-width=".6" opacity=".3"/>
+      <!-- Top tip accent -->
+      <circle cx="19" cy="2" r="1.2" fill="#c9a84c" opacity=".7"/>
+      <circle cx="36" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="19" cy="36" r="1.2" fill="#c9a84c" opacity=".5"/>
+      <circle cx="2" cy="19" r="1.2" fill="#c9a84c" opacity=".5"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-name"><span class="lum">Luminous</span> Studio</span>
+      <span class="logo-sub">Creative Agency</span>
+    </div>
+  </a>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" onclick="nav('home');return false;" class="active" data-page="home">Home</a></li>
+    <li><a href="#" onclick="nav('work');return false;" data-page="work">Work</a></li>
+    <li><a href="#" onclick="nav('about');return false;" data-page="about">About</a></li>
+    <li><a href="#" onclick="nav('services');return false;" data-page="services">Services</a></li>
+    <li><a href="#" onclick="nav('contact');return false;" data-page="contact">Contact</a></li>
+  </ul>
+  <button class="nav-btn d-none d-md-block" onclick="nav('contact')">Start a Project</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE: HOME                                     -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-dots"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Creative Studio — Est. 2019</div>
+      <h1 class="hero-h1">
+        We craft<br>
+        <em>luminous</em><br>
+        experiences
+      </h1>
+      <p class="hero-p">A boutique creative studio building brand identities, digital products, and visual stories that resonate, endure, and inspire.</p>
+      <div class="hero-btns">
+        <button class="btn-gold" onclick="nav('work')">View Our Work</button>
+        <a href="#" class="btn-outline" onclick="nav('about');return false;">Our Story <span>→</span></a>
+      </div>
+    </div>
+    <div class="hero-aside">
+      <div class="h-stat">
+        <div class="h-stat-n" data-count="94">0<span>+</span></div>
+        <div class="h-stat-l">Projects</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-n" data-count="7">0<span>yr</span></div>
+        <div class="h-stat-l">Experience</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-n" data-count="100">0<span>%</span></div>
+        <div class="h-stat-l">Retention</div>
+      </div>
+    </div>
+    <div class="scroll-hint"><div class="scroll-bar"></div>Scroll</div>
+
+    <!-- Animated hero visual: pen → camera → code, fully contained in circle -->
+    <div class="hero-visual-outer">
+      <div class="hero-visual-circle">
+        <div class="hv-ring hv-ring-1"><div class="hv-orb"></div></div>
+        <div class="hv-ring hv-ring-2"></div>
+        <div class="hv-ring hv-ring-3"></div>
+        <div class="hv-icon-wrap">
+          <!-- PEN -->
+          <svg class="hv-icon" id="hv-pen" viewBox="0 0 80 80" fill="none">
+            <path d="M55 10L70 25L30 65L10 70L15 50L55 10Z" stroke="#c9a84c" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M45 20L60 35" stroke="#c9a84c" stroke-width="1.6"/>
+            <path d="M15 50L30 65" stroke="#c9a84c" stroke-width="1.1" opacity=".5"/>
+            <circle cx="12" cy="68" r="2.5" fill="#c9a84c" opacity=".75"/>
+            <path d="M48 17L63 32" stroke="#c9a84c" stroke-width=".9" opacity=".3"/>
+          </svg>
+          <!-- CAMERA -->
+          <svg class="hv-icon" id="hv-cam" viewBox="0 0 80 80" fill="none">
+            <rect x="8" y="24" width="64" height="42" rx="4" stroke="#c9a84c" stroke-width="1.6"/>
+            <path d="M26 24L30 14H50L54 24" stroke="#c9a84c" stroke-width="1.6" stroke-linejoin="round"/>
+            <circle cx="40" cy="45" r="13" stroke="#c9a84c" stroke-width="1.6"/>
+            <circle cx="40" cy="45" r="7" stroke="#c9a84c" stroke-width="1" opacity=".5"/>
+            <circle cx="40" cy="45" r="3" fill="#c9a84c" opacity=".7"/>
+            <circle cx="62" cy="32" r="3" stroke="#c9a84c" stroke-width="1.1" opacity=".6"/>
+          </svg>
+          <!-- CODE -->
+          <svg class="hv-icon" id="hv-code" viewBox="0 0 80 80" fill="none">
+            <path d="M28 22L10 40L28 58" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M52 22L70 40L52 58" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M44 16L36 64" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" opacity=".55"/>
+          </svg>
+        </div>
+        <div class="hv-meta">
+          <div class="hv-label" id="hvLabel">Brand</div>
+          <div class="hv-dots">
+            <div class="hv-dot active" id="hvDot0"></div>
+            <div class="hv-dot" id="hvDot1"></div>
+            <div class="hv-dot" id="hvDot2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="mq-track">
+      <span class="mq-item">Brand Identity</span>
+      <span class="mq-item">Web Design</span>
+      <span class="mq-item">Motion Design</span>
+      <span class="mq-item">UI & UX</span>
+      <span class="mq-item">Development</span>
+      <span class="mq-item">Art Direction</span>
+      <span class="mq-item">Photography</span>
+      <span class="mq-item">Strategy</span>
+      <span class="mq-item">Brand Identity</span>
+      <span class="mq-item">Web Design</span>
+      <span class="mq-item">Motion Design</span>
+      <span class="mq-item">UI & UX</span>
+      <span class="mq-item">Development</span>
+      <span class="mq-item">Art Direction</span>
+      <span class="mq-item">Photography</span>
+      <span class="mq-item">Strategy</span>
+    </div>
+  </div>
+
+  <!-- About Strip -->
+  <section class="sec about-strip">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="about-grid">
+        <div>
+          <div class="lbl rv">Who We Are</div>
+          <h2 class="display-title rv rv-d1">Crafting beauty<br>with <em>purpose</em></h2>
+          <p class="body-text mt-4 rv rv-d2">Luminous Studio is a boutique creative agency specialising in brand identity, digital design, and bespoke web experiences. We believe that exceptional design is not decoration — it is strategy made visible.</p>
+          <p class="body-text mt-3 rv rv-d2">Founded in Lagos and working globally, we partner with founders, enterprises, and cultural institutions to build work that lasts.</p>
+          <button class="btn-outline mt-4 rv rv-d3" style="border:none;padding:0;color:var(--gold);font-size:.68rem;letter-spacing:.18em;" onclick="nav('about')">Our Story →</button>
+        </div>
+        <div class="about-visual rv rv-d2">
+          <div class="about-visual-inner">
+            <!-- Decorative geometric -->
+            <svg width="180" height="220" viewBox="0 0 180 220" fill="none" opacity=".25">
+              <rect x="30" y="30" width="120" height="160" stroke="#c9a84c" stroke-width=".8"/>
+              <rect x="50" y="50" width="80" height="120" stroke="#c9a84c" stroke-width=".5"/>
+              <line x1="30" y1="30" x2="50" y2="50" stroke="#c9a84c" stroke-width=".5"/>
+              <line x1="150" y1="30" x2="130" y2="50" stroke="#c9a84c" stroke-width=".5"/>
+              <line x1="30" y1="190" x2="50" y2="170" stroke="#c9a84c" stroke-width=".5"/>
+              <line x1="150" y1="190" x2="130" y2="170" stroke="#c9a84c" stroke-width=".5"/>
+              <circle cx="90" cy="110" r="30" stroke="#c9a84c" stroke-width=".6"/>
+              <circle cx="90" cy="110" r="4" fill="#c9a84c" opacity=".6"/>
+            </svg>
+          </div>
+          <div class="about-tag">Lagos, Nigeria — Est. 2019</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="sec" id="svc-home">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl rv">What We Do</div>
+      <h2 class="display-title rv rv-d1">Our <em>craft</em></h2>
+    </div>
+    <div class="svc-row mt-5 rv">
+      <div class="svc-card">
+        <div class="svc-n">01</div>
+        <div class="svc-title">Brand<br>Identity</div>
+        <p class="svc-desc">Logos, systems, and visual languages that define who you are at every touchpoint.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-n">02</div>
+        <div class="svc-title">Web<br>Design</div>
+        <p class="svc-desc">Considered, purposeful interfaces that communicate, convert, and delight.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-n">03</div>
+        <div class="svc-title">Motion<br>& Film</div>
+        <p class="svc-desc">Brand films, animations, and moving visuals that bring your story to life.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-n">04</div>
+        <div class="svc-title">UI / UX<br>Design</div>
+        <p class="svc-desc">User-centred product design from wireframe through to polished, accessible UI.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-n">05</div>
+        <div class="svc-title">Strategy<br>& Consulting</div>
+        <p class="svc-desc">Positioning, messaging, and creative direction grounded in insight.</p>
+      </div>
+      <div class="svc-card" style="border-right:none;">
+        <div class="svc-n">06</div>
+        <div class="svc-title">Art<br>Direction</div>
+        <p class="svc-desc">Creative vision across campaigns, shoots, and all brand communications.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected Work -->
+  <section class="sec" style="background:var(--surface);">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 rv">
+        <div>
+          <div class="lbl">Selected Work</div>
+          <h2 class="display-title">Recent <em>projects</em></h2>
+        </div>
+        <button class="btn-outline" onclick="nav('work')">View All Work →</button>
+      </div>
+      <div class="work-bento rv rv-d1">
+        <div class="wc">
+          <div class="wc-img"><div class="wc-img-inner t1">
+            <div class="wc-dec"><svg width="100" height="100" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" stroke="#c9a84c" stroke-width="0.5"/><circle cx="50" cy="50" r="20" stroke="#c9a84c" stroke-width="0.5"/><line x1="10" y1="50" x2="90" y2="50" stroke="#c9a84c" stroke-width="0.4"/><line x1="50" y1="10" x2="50" y2="90" stroke="#c9a84c" stroke-width="0.4"/></svg></div>
+          </div></div>
+          <div class="wc-info">
+            <div><div class="wc-tag">Branding / Web</div><div class="wc-name">Aurelius Collective</div></div>
+            <div class="wc-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.2"/></svg></div>
+          </div>
+        </div>
+        <div class="wc">
+          <div class="wc-img"><div class="wc-img-inner t2">
+            <div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="8" y="8" width="64" height="64" stroke="#c9a84c" stroke-width="0.5"/><rect x="20" y="20" width="40" height="40" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="10" stroke="#c9a84c" stroke-width="0.4"/></svg></div>
+          </div></div>
+          <div class="wc-info">
+            <div><div class="wc-tag">Identity</div><div class="wc-name">Verdant Goods</div></div>
+            <div class="wc-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.2"/></svg></div>
+          </div>
+        </div>
+        <div class="wc">
+          <div class="wc-img"><div class="wc-img-inner t3">
+            <div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><polygon points="40,5 75,70 5,70" stroke="#c9a84c" stroke-width="0.5" fill="none"/><polygon points="40,22 60,65 20,65" stroke="#c9a84c" stroke-width="0.4" fill="none"/></svg></div>
+          </div></div>
+          <div class="wc-info">
+            <div><div class="wc-tag">UI / Strategy</div><div class="wc-name">Apex Platform</div></div>
+            <div class="wc-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.2"/></svg></div>
+          </div>
+        </div>
+        <div class="wc">
+          <div class="wc-img"><div class="wc-img-inner t4">
+            <div class="wc-dec"><svg width="120" height="80" viewBox="0 0 120 80" fill="none"><ellipse cx="60" cy="40" rx="50" ry="28" stroke="#c9a84c" stroke-width="0.5"/><ellipse cx="60" cy="40" rx="25" ry="14" stroke="#c9a84c" stroke-width="0.4"/><line x1="10" y1="40" x2="110" y2="40" stroke="#c9a84c" stroke-width="0.4"/></svg></div>
+          </div></div>
+          <div class="wc-info">
+            <div><div class="wc-tag">Full Production</div><div class="wc-name">Meridian Finance</div></div>
+            <div class="wc-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.2"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="sec test-section">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="test-inner rv">
+        <div class="lbl">Client Voice</div>
+        <blockquote class="test-q">"Luminous Studio didn't just redesign our brand — they helped us <strong>rediscover our voice</strong>. The result was transformative in ways we hadn't anticipated."</blockquote>
+        <div class="test-author">
+          <div class="test-av">TN</div>
+          <div>
+            <div class="test-name">Temi Nwosu</div>
+            <div class="test-role">Founder — Claré Wellness</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Band -->
+  <div class="cta-band rv">
+    <div class="cta-band-t">Ready to build<br><em>something lasting?</em></div>
+    <button class="btn-dark" onclick="nav('contact')">Start a Conversation →</button>
+  </div>
+
+  <footer>
+    <div class="container-fluid px-4 px-md-5">
+      <div class="ft-grid">
+        <div class="ft-logo-wrap">
+          <a href="#" class="logo-wrap" onclick="nav('home');return false;" style="text-decoration:none;">
+            <svg class="logo-svg" viewBox="0 0 38 38" fill="none"><path d="M19 2L36 19L19 36L2 19Z" stroke="#c9a84c" stroke-width="1" fill="none"/><path d="M19 8L19 30" stroke="#c9a84c" stroke-width=".6" opacity=".4"/><path d="M8 19L30 19" stroke="#c9a84c" stroke-width=".6" opacity=".4"/><circle cx="19" cy="19" r="3.5" fill="#c9a84c" opacity=".9"/><circle cx="19" cy="19" r="6" stroke="#c9a84c" stroke-width=".6" opacity=".3"/><circle cx="19" cy="2" r="1.2" fill="#c9a84c" opacity=".7"/></svg>
+            <div class="logo-text-wrap">
+              <span class="logo-name"><span class="lum">Luminous</span> Studio</span>
+              <span class="logo-sub">Creative Agency</span>
+            </div>
+          </a>
+          <p class="ft-tagline">A boutique creative studio building brand identities and digital experiences that endure.</p>
+        </div>
+        <div>
+          <div class="ft-h">Navigate</div>
+          <ul class="ft-links">
+            <li><a href="#" onclick="nav('home');return false;">Home</a></li>
+            <li><a href="#" onclick="nav('work');return false;">Work</a></li>
+            <li><a href="#" onclick="nav('about');return false;">About</a></li>
+            <li><a href="#" onclick="nav('services');return false;">Services</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ft-h">Services</div>
+          <ul class="ft-links">
+            <li><a href="#">Brand Identity</a></li>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Motion & Film</a></li>
+            <li><a href="#">UI / UX</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ft-h">Contact</div>
+          <ul class="ft-links">
+            <li><a href="#"><span class="__cf_email__" data-cfemail="c6aea3aaaaa986aab3abafa8a9b3b5e8b5b2b3a2afa9">[email&#160;protected]</span></a></li>
+            <li><a href="#">Lagos, Nigeria</a></li>
+            <li><a href="#" onclick="nav('contact');return false;">Start a Project</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <span class="ft-copy">© 2026 Luminous Studio. All rights reserved.</span>
+        <div class="ft-socials">
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Behance</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE: WORK                                     -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-work">
+  <div class="pg-hero">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl">Portfolio</div>
+      <h1 class="display-title">Selected <em>Work</em></h1>
+      <p class="body-text mt-3" style="max-width:500px;">A curated selection of projects across branding, digital design, and motion — each one a collaboration built on trust and craft.</p>
+      <div class="filter-bar mt-4">
+        <button class="filter-btn active" onclick="filterWork(this,'all')">All</button>
+        <button class="filter-btn" onclick="filterWork(this,'branding')">Branding</button>
+        <button class="filter-btn" onclick="filterWork(this,'web')">Web</button>
+        <button class="filter-btn" onclick="filterWork(this,'motion')">Motion</button>
+        <button class="filter-btn" onclick="filterWork(this,'ui')">UI / UX</button>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="projects-grid" id="projectsGrid">
+        <div class="proj-card" data-cat="branding web">
+          <div class="proj-img"><div class="proj-img-inner t1"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="32" stroke="#c9a84c" stroke-width="0.6"/><circle cx="40" cy="40" r="16" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="4" fill="#c9a84c" opacity=".5"/></svg></div></div></div>
+          <div class="proj-info">
+            <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Web</span></div>
+            <div class="proj-title">Aurelius Collective</div>
+            <p class="proj-desc">A complete brand overhaul and digital presence for a Lagos-based contemporary art collective.</p>
+            <a href="#" class="proj-cta">View Case Study →</a>
+          </div>
+        </div>
+        <div class="proj-card" data-cat="branding">
+          <div class="proj-img"><div class="proj-img-inner t2"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="10" y="10" width="60" height="60" stroke="#c9a84c" stroke-width="0.6"/><rect x="22" y="22" width="36" height="36" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="8" stroke="#c9a84c" stroke-width="0.4"/></svg></div></div></div>
+          <div class="proj-info">
+            <div class="proj-tags"><span class="proj-tag">Branding</span></div>
+            <div class="proj-title">Verdant Goods</div>
+            <p class="proj-desc">Earthy, considered brand identity for a sustainable homeware brand entering the European market.</p>
+            <a href="#" class="proj-cta">View Case Study →</a>
+          </div>
+        </div>
+        <div class="proj-card" data-cat="ui web">
+          <div class="proj-img"><div class="proj-img-inner t3"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><polygon points="40,6 74,68 6,68" stroke="#c9a84c" stroke-width="0.6" fill="none"/><polygon points="40,22 62,64 18,64" stroke="#c9a84c" stroke-width="0.4" fill="none"/></svg></div></div></div>
+          <div class="proj-info">
+            <div class="proj-tags"><span class="proj-tag">UI / UX</span><span class="proj-tag">Web</span></div>
+            <div class="proj-title">Apex Platform</div>
+            <p class="proj-desc">Full UX strategy and interface design for a B2B financial analytics platform used by 40k+ users.</p>
+            <a href="#" class="proj-cta">View Case Study →</a>
+          </div>
+        </div>
+        <div class="proj-card" data-cat="branding web">
+          <div class="proj-img"><div class="proj-img-inner t4"><div class="wc-dec"><svg width="100" height="70" viewBox="0 0 100 70" fill="none"><ellipse cx="50" cy="35" rx="42" ry="24" stroke="#c9a84c" stroke-width="0.6"/><ellipse cx="50" cy="35" rx="22" ry="12" stroke="#c9a84c" stroke-width="0.4"/></svg></div></div></div>
+          <div class="proj-info">
+            <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Web</span></div>
+            <div class="proj-title">Meridian Finance</div>
+            <p class="proj-desc">Premium brand identity and web experience for a boutique investment advisory firm.</p>
+            <a href="#" class="proj-cta">View Case Study →</a>
+          </div>
+        </div>
+        <div class="proj-card" data-cat="motion">
+          <div class="proj-img"><div class="proj-img-inner t1" style="background:linear-gradient(140deg,#100e18,#1c1830,#0e0c18)"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><path d="M40 8 L72 40 L40 72 L8 40Z" stroke="#c9a84c" stroke-width="0.6" fill="none"/><circle cx="40" cy="40" r="14" stroke="#c9a84c" stroke-width="0.4"/><circle cx="40" cy="40" r="4" fill="#c9a84c" opacity=".4"/></svg></div></div></div>
+          <div class="proj-info">
+            <div class="proj-tags"><span class="proj-tag">Motion</span></div>
+            <div class="proj-title">Solstice Brand Film</div>
+            <p class="proj-desc">A 90-second brand anthem film for a luxury skincare company launching in West Africa.</p>
+            <a href="#" class="proj-cta">View Case Study →</a>
+          </div>
+        </div>
+        <div class="proj-card" data-cat="branding motion">
+          <div class="proj-img"><div class="proj-img-inner t2" style="background:linear-gradient(140deg,#0a0e10,#10181c,#0e1414)"><div class="wc-dec"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="8" y="8" width="64" height="64" stroke="#c9a84c" stroke-width="0.5" rx="2"/><rect x="20" y="20" width="40" height="40" stroke="#c9a84c" stroke-width="0.4" rx="2"/><rect x="32" y="32" width="16" height="16" stroke="#c9a84c" stroke-width="0.4" rx="1"/></svg></div></div></div>
+          <div class="proj-info">
+            <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Motion</span></div>
+            <div class="proj-title">Claré Wellness</div>
+            <p class="proj-desc">Brand identity, packaging design, and animated brand assets for a wellness startup.</p>
+            <a href="#" class="proj-cta">View Case Study →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cta-band">
+    <div class="cta-band-t">Have a project<br><em>in mind?</em></div>
+    <button class="btn-dark" onclick="nav('contact')">Let's Talk →</button>
+  </div>
+  <footer>
+    <div class="container-fluid px-4 px-md-5">
+      <div class="ft-bottom">
+        <span class="ft-copy">© 2026 Luminous Studio.</span>
+        <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE: ABOUT                                    -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="pg-hero">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl">Our Story</div>
+      <h1 class="display-title">Built on <em>craft</em><br>& conviction</h1>
+      <p class="body-text mt-3" style="max-width:560px;">Founded in Lagos in 2019, Luminous Studio began as a two-person operation driven by a belief that African brands deserve world-class creative partners.</p>
+    </div>
+  </div>
+  <section class="sec">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="row g-5 align-items-center rv">
+        <div class="col-lg-6">
+          <div class="lbl">The Vision</div>
+          <h2 class="display-title">We make the <em>invisible</em> visible</h2>
+          <p class="body-text mt-4">Every brand carries a story that is waiting to be told clearly and beautifully. Our job is to find that truth and express it with intention — across every medium, at every scale.</p>
+          <p class="body-text mt-3">We are a small team by design. Every project receives the full attention of our senior creative team, not handed off to juniors or automated.</p>
+        </div>
+        <div class="col-lg-5 offset-lg-1">
+          <div class="values-grid">
+            <div class="val-item">
+              <div class="val-n">01</div>
+              <div class="val-title">Craft First</div>
+              <p class="val-desc">We obsess over every detail — kerning, colour, code — because excellence is cumulative.</p>
+            </div>
+            <div class="val-item">
+              <div class="val-n">02</div>
+              <div class="val-title">Honest Work</div>
+              <p class="val-desc">We tell you what your brand needs, not what is easiest or most profitable for us.</p>
+            </div>
+            <div class="val-item">
+              <div class="val-n">03</div>
+              <div class="val-title">Long View</div>
+              <p class="val-desc">We design for durability. Trends are reference points, not destinations.</p>
+            </div>
+            <div class="val-item">
+              <div class="val-n">04</div>
+              <div class="val-title">True Partners</div>
+              <p class="val-desc">We invest in your success long after the brief is delivered.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="background:var(--surface); padding-top:5rem; padding-bottom:5rem;">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl rv">The Team</div>
+      <h2 class="display-title rv rv-d1">The people <em>behind the work</em></h2>
+      <div class="team-grid mt-5 rv rv-d2" style="grid-template-columns:repeat(4,1fr);">
+        <div class="team-card">
+          <div class="team-img"><div class="team-ph ph-1"><span class="ph-init">SE</span></div></div>
+          <div class="team-name">Solomon Essian</div>
+          <div class="team-role">Advertisement Team</div>
+        </div>
+        <div class="team-card">
+          <div class="team-img"><div class="team-ph ph-2"><span class="ph-init">EA</span></div></div>
+          <div class="team-name">Esther Abutu</div>
+          <div class="team-role">Advertisement Team</div>
+        </div>
+        <div class="team-card">
+          <div class="team-img"><div class="team-ph ph-3"><span class="ph-init">TA</span></div></div>
+          <div class="team-name">Tabitha</div>
+          <div class="team-role">Advertisement Team</div>
+        </div>
+        <div class="team-card">
+          <div class="team-img"><div class="team-ph ph-4" style="background:linear-gradient(160deg,#1a1408,#2a1e08);"><span class="ph-init" style="color:rgba(201,168,76,.65);">RT</span></div></div>
+          <div class="team-name">Robinson Treasure</div>
+          <div class="team-role">Developer &amp; Founder</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="cta-band-t">Want to work <em>with us?</em></div>
+    <button class="btn-dark" onclick="nav('contact')">Get in Touch →</button>
+  </div>
+  <footer>
+    <div class="container-fluid px-4 px-md-5">
+      <div class="ft-bottom">
+        <span class="ft-copy">© 2026 Luminous Studio.</span>
+        <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE: SERVICES                                 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-services">
+  <div class="pg-hero">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl">Capabilities</div>
+      <h1 class="display-title">What we <em>offer</em></h1>
+      <p class="body-text mt-3" style="max-width:520px;">We offer a focused suite of creative services. Not everything, but everything we do — we do exceptionally.</p>
+    </div>
+  </div>
+  <section class="sec">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="svc-detail-list rv">
+        <div class="svc-detail-item">
+          <div class="sd-n">01</div>
+          <div class="sd-main">
+            <div class="sd-title">Brand Identity</div>
+            <p class="sd-desc">Complete visual identity systems — logo design, typography, colour, brand guidelines, and collateral — built to scale.</p>
+          </div>
+          <div class="sd-features">
+            <div class="sd-feat">Logo & Mark Design</div>
+            <div class="sd-feat">Brand Guidelines</div>
+            <div class="sd-feat">Typography Systems</div>
+            <div class="sd-feat">Stationery & Print</div>
+          </div>
+        </div>
+        <div class="svc-detail-item">
+          <div class="sd-n">02</div>
+          <div class="sd-main">
+            <div class="sd-title">Web Design & Development</div>
+            <p class="sd-desc">Bespoke websites and digital experiences — designed with intention and built with precision, from marketing sites to complex web apps.</p>
+          </div>
+          <div class="sd-features">
+            <div class="sd-feat">Custom Web Design</div>
+            <div class="sd-feat">Front-End Development</div>
+            <div class="sd-feat">CMS Integration</div>
+            <div class="sd-feat">Performance Optimisation</div>
+          </div>
+        </div>
+        <div class="svc-detail-item">
+          <div class="sd-n">03</div>
+          <div class="sd-main">
+            <div class="sd-title">Motion Design & Film</div>
+            <p class="sd-desc">Brand films, UI animations, explainer videos, and motion identities that give your brand a voice in time.</p>
+          </div>
+          <div class="sd-features">
+            <div class="sd-feat">Brand Films</div>
+            <div class="sd-feat">UI / Web Animation</div>
+            <div class="sd-feat">Social Content</div>
+            <div class="sd-feat">Logo Animation</div>
+          </div>
+        </div>
+        <div class="svc-detail-item">
+          <div class="sd-n">04</div>
+          <div class="sd-main">
+            <div class="sd-title">UI / UX Design</div>
+            <p class="sd-desc">User research, wireframing, prototyping, and polished interface design for digital products — from consumer apps to enterprise platforms.</p>
+          </div>
+          <div class="sd-features">
+            <div class="sd-feat">User Research</div>
+            <div class="sd-feat">Wireframing & Flows</div>
+            <div class="sd-feat">Prototype & Test</div>
+            <div class="sd-feat">Design Systems</div>
+          </div>
+        </div>
+        <div class="svc-detail-item">
+          <div class="sd-n">05</div>
+          <div class="sd-main">
+            <div class="sd-title">Strategy & Art Direction</div>
+            <p class="sd-desc">Creative and brand strategy — positioning, messaging architecture, and art direction for campaigns, shoots, and all communications.</p>
+          </div>
+          <div class="sd-features">
+            <div class="sd-feat">Brand Positioning</div>
+            <div class="sd-feat">Messaging Architecture</div>
+            <div class="sd-feat">Campaign Direction</div>
+            <div class="sd-feat">Creative Consulting</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="background:var(--surface);">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl rv">Investment</div>
+      <h2 class="display-title rv rv-d1">Simple, <em>transparent</em> pricing</h2>
+      <div class="pricing-grid rv rv-d2">
+        <div class="price-card">
+          <div class="price-tier">Essentials</div>
+          <div class="price-amount"><span>₦</span>7,500,000</div>
+          <div class="price-period">Starting from</div>
+          <ul class="price-features">
+            <li>Logo & Brand Mark</li>
+            <li>Colour & Typography</li>
+            <li>Basic Brand Guidelines</li>
+            <li>2 rounds of revisions</li>
+            <li>Digital file delivery</li>
+          </ul>
+          <button class="btn-outline w-100" style="justify-content:center;" onclick="nav('contact')">Get Started</button>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">Most Popular</div>
+          <div class="price-tier">Studio</div>
+          <div class="price-amount"><span>₦</span>30,000</div>
+          <div class="price-period">Starting from</div>
+          <ul class="price-features">
+            <li>Full Brand Identity</li>
+            <li>Website (up to 8 pages)</li>
+            <li>Brand Guidelines Document</li>
+            <li>3 rounds of revisions</li>
+            <li>3-month post-launch support</li>
+          </ul>
+          <button class="btn-gold w-100" style="justify-content:center;" onclick="nav('contact')">Get Started</button>
+        </div>
+        <div class="price-card">
+          <div class="price-tier">Enterprise</div>
+          <div class="price-amount">Custom</div>
+          <div class="price-period">Scoped to project</div>
+          <ul class="price-features">
+            <li>Everything in Studio</li>
+            <li>Motion & Film Production</li>
+            <li>UI/UX for Digital Products</li>
+            <li>Ongoing retainer available</li>
+            <li>Dedicated account manager</li>
+          </ul>
+          <button class="btn-outline w-100" style="justify-content:center;" onclick="nav('contact')">Let's Talk</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="cta-band-t">Not sure what<br><em>you need?</em></div>
+    <button class="btn-dark" onclick="nav('contact')">Let's Figure It Out →</button>
+  </div>
+  <footer>
+    <div class="container-fluid px-4 px-md-5">
+      <div class="ft-bottom">
+        <span class="ft-copy">© 2026 Luminous Studio.</span>
+        <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE: CONTACT                                  -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="pg-hero">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="lbl">Get In Touch</div>
+      <h1 class="display-title">Let's build<br>something <em>together</em></h1>
+      <p class="body-text mt-3" style="max-width:500px;">We take on a limited number of projects each quarter. Tell us about yours and let's find out if we're a good fit.</p>
+    </div>
+  </div>
+  <section class="sec">
+    <div class="container-fluid px-4 px-md-5">
+      <div class="contact-grid rv">
+        <div>
+          <div class="lbl">Send a Message</div>
+          <div class="contact-form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-input" placeholder="Amara"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-input" placeholder="Kelechi"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" placeholder="hello@yourcompany.com"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Company / Organisation</label>
+              <input type="text" class="form-input" placeholder="Your Company"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Service of Interest</label>
+              <select class="form-select">
+                <option value="" disabled selected>Select a service</option>
+                <option>Brand Identity</option>
+                <option>Web Design & Development</option>
+                <option>Motion Design & Film</option>
+                <option>UI / UX Design</option>
+                <option>Strategy & Art Direction</option>
+                <option>Full Studio Package</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tell us about your project</label>
+              <textarea class="form-textarea" placeholder="Describe your project, goals, and timeline..."></textarea>
+            </div>
+            <button class="submit-btn" onclick="submitForm()">Send Message →</button>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <p>Message sent — we'll be in touch within 2 business days. ✦</p>
+          </div>
+        </div>
+        <div>
+          <div class="lbl">Studio Info</div>
+          <div class="contact-info mt-3">
+            <div class="ci-item">
+              <div class="ci-label">Email</div>
+              <div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e565b5252517e524b535750514b4d104d4a4b5a5751">[email&#160;protected]</a></div>
+            </div>
+            <div class="ci-item">
+              <div class="ci-label">Phone</div>
+              <div class="ci-val">+234 812 345 6789</div>
+            </div>
+            <div class="ci-item">
+              <div class="ci-label">Location</div>
+              <div class="ci-val">Victoria Island, Lagos<br>Nigeria — Working Globally</div>
+            </div>
+            <div class="ci-item">
+              <div class="ci-label">Studio Hours</div>
+              <div class="ci-val">Mon – Fri, 9am – 6pm WAT</div>
+            </div>
+          </div>
+          <div class="contact-map mt-4" style="height:280px;padding:0;overflow:hidden;border:1px solid var(--border);">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7290281622184!2d3.4215938!3d6.4280573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf53aec4dd92d%3A0x7031f108b09f3bd8!2sVictoria%20Island%2C%20Lagos!5e0!3m2!1sen!2sng!4v1710000000000!5m2!1sen!2sng"
+              width="100%" height="100%" style="border:0;filter:grayscale(60%) invert(90%) contrast(0.85) sepia(20%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <div class="mt-4">
+            <div class="lbl" style="margin-bottom:.8rem;">Follow Our Work</div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+              <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">Instagram</a>
+              <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">Twitter</a>
+              <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">LinkedIn</a>
+              <a href="#" class="btn-outline" style="padding:.55rem 1.2rem;font-size:.62rem;">Behance</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container-fluid px-4 px-md-5">
+      <div class="ft-bottom">
+        <span class="ft-copy">© 2026 Luminous Studio.</span>
+        <div class="ft-socials"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Bootstrap -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ─── CURSOR ───
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function animR(){
+    rx+=(mx-rx)*.13; ry+=(my-ry)*.13;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(animR);
+  })();
+  document.querySelectorAll('a,button,.svc-card,.wc,.proj-card,.svc-detail-item,.team-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+
+  // ─── NAV ───
+  window.addEventListener('scroll',()=>{
+    document.getElementById('navbar').classList.toggle('scrolled',scrollY>40);
+  });
+
+  // ─── PAGE ROUTING ───
+  function nav(page){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a=>{
+      a.classList.toggle('active', a.dataset.page===page);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+    setTimeout(initReveal,100);
+    // Re-bind cursor hovers on new page
+    setTimeout(()=>{
+      document.querySelectorAll('a,button,.svc-card,.wc,.proj-card,.svc-detail-item,.team-card').forEach(el=>{
+        el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+      });
+    },200);
+  }
+
+  // ─── MOBILE MENU ───
+  function toggleMobile(){
+    const m=document.getElementById('mobileMenu');
+    const h=document.getElementById('hamburger');
+    m.classList.toggle('open');
+    h.classList.toggle('open');
+  }
+  function closeMobile(){
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  }
+
+  // ─── REVEAL ───
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('vis');
+    });
+  },{threshold:.12});
+  function initReveal(){
+    document.querySelectorAll('.rv:not(.vis)').forEach(el=>observer.observe(el));
+  }
+  initReveal();
+
+  // ─── COUNTER ───
+  function runCounters(){
+    document.querySelectorAll('[data-count]').forEach(el=>{
+      const target=+el.dataset.count;
+      const suffix=el.querySelector('span')?.outerHTML||'';
+      const inner=el.innerHTML.replace(suffix,'').replace(/[^0-9]/g,'');
+      let c=0; const step=target/55;
+      const t=setInterval(()=>{
+        c=Math.min(c+step,target);
+        el.innerHTML=Math.floor(c)+(suffix);
+        if(c>=target)clearInterval(t);
+      },16);
+    });
+  }
+  const statsObs=new IntersectionObserver(e=>{
+    if(e[0].isIntersecting){runCounters();statsObs.disconnect();}
+  },{threshold:.6});
+  const aside=document.querySelector('.hero-aside');
+  if(aside) statsObs.observe(aside);
+
+  // ─── WORK FILTER ───
+  function filterWork(btn, cat){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.proj-card').forEach(c=>{
+      const cats=c.dataset.cat||'';
+      const show=cat==='all'||cats.includes(cat);
+      c.style.opacity=show?'1':'0.2'
+      c.style.pointerEvents=show?'auto':'none';
+      c.style.transition='opacity .3s';
+    });
+  }
+
+  // ─── CONTACT FORM → WHATSAPP ───
+  function submitForm(){
+    const inputs = document.querySelectorAll('#contactForm .form-input, #contactForm .form-textarea, #contactForm .form-select');
+    const firstName  = inputs[0]?.value.trim();
+    const lastName   = inputs[1]?.value.trim();
+    const email      = inputs[2]?.value.trim();
+    const company    = inputs[3]?.value.trim();
+    const service    = inputs[4]?.value;
+    const message    = inputs[5]?.value.trim();
+
+    if(!firstName || !email || !message){
+      [inputs[0], inputs[2], inputs[5]].forEach(f=>{
+        if(f && !f.value.trim()) f.style.borderColor='var(--gold)';
+      });
+      if(!document.getElementById('formErr')){
+        const e = document.createElement('p');
+        e.id='formErr';
+        e.style.cssText='font-family:Syne,sans-serif;font-size:.7rem;letter-spacing:.1em;color:var(--gold);margin-top:.5rem;';
+        e.textContent='Please fill in your name, email, and project details.';
+        document.querySelector('.submit-btn').insertAdjacentElement('beforebegin', e);
+      }
+      return;
+    }
+
+    const phone = '2349166819937';
+    const text = [
+      '✦ NEW PROJECT ENQUIRY — Luminous Studio',
+      '',
+      'Name: ' + firstName + ' ' + lastName,
+      'Email: ' + email,
+      company ? 'Company: ' + company : null,
+      service ? 'Service: ' + service : null,
+      '',
+      'Project Details:',
+      message,
+      '',
+      '— Sent via luminous.studio'
+    ].filter(l=>l!==null).join('\n');
+
+    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+
+    document.getElementById('contactForm').style.display='none';
+    document.getElementById('formSuccess').classList.add('show');
+  }
+
+  // ─── HERO VISUAL ICON CYCLE ───
+  const hvIcons  = ['hv-pen','hv-cam','hv-code'];
+  const hvLabels = ['Brand','Visual','Digital'];
+  let hvCurrent  = 0;
+  function hvActivate(i){
+    hvIcons.forEach((id,idx)=>{
+      const el=document.getElementById(id);
+      if(el) el.classList.toggle('active',idx===i);
+    });
+    const lbl=document.getElementById('hvLabel');
+    if(lbl) lbl.textContent=hvLabels[i];
+    for(let d=0;d<3;d++){
+      const dot=document.getElementById('hvDot'+d);
+      if(dot) dot.classList.toggle('active',d===i);
+    }
+  }
+  setTimeout(()=>{
+    hvActivate(0);
+    setInterval(()=>{ hvCurrent=(hvCurrent+1)%3; hvActivate(hvCurrent); },2600);
+  },1400);
+</script>
+</body>
+</html>
