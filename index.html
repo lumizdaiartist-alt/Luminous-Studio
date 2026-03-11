@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Luminous Studio — Creative Agency</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -578,39 +578,10 @@
     }
     @keyframes ping { 0%{width:10px;height:10px;opacity:1} 100%{width:80px;height:80px;opacity:0} }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width:1024px) {
-      .svc-row { grid-template-columns:repeat(2,1fr); }
-      .ft-grid { grid-template-columns:1fr 1fr; }
-      .svc-detail-item { grid-template-columns:40px 1fr; }
-      .sd-features { display:none; }
-    }
-    @media (max-width:768px) {
-      nav { padding:1.2rem 1.5rem; }
-      .nav-links, .nav-btn { display:none; }
-      .hamburger { display:flex; }
-      .hero { padding:6rem 1.5rem 3rem; }
-      .hero-aside { display:none; }
-      .sec { padding:4.5rem 0; }
-      .about-grid { grid-template-columns:1fr; }
-      .about-visual { display:none; }
-      .svc-row { grid-template-columns:1fr; }
-      .work-bento .wc { grid-column:span 12 !important; }
-      .projects-grid { grid-template-columns:1fr; }
-      .team-grid { grid-template-columns:1fr 1fr; }
-      .values-grid { grid-template-columns:1fr; }
-      .val-item { border-right:none; }
-      .contact-grid { grid-template-columns:1fr; gap:3rem; }
-      .form-row { grid-template-columns:1fr; }
-      .pricing-grid { grid-template-columns:1fr; }
-      .ft-grid { grid-template-columns:1fr; }
-      .pg-hero { padding:7rem 1.5rem 3rem; }
-      .cta-band { flex-direction:column; }
-    }
     /* ─── HERO VISUAL ─── */
     .hero-visual-outer {
       position: absolute;
-      right: 7%;
+      right: 5%;
       top: 50%;
       transform: translateY(-50%);
       width: 320px; height: 320px;
@@ -619,21 +590,16 @@
       animation: fadeU .9s 1.1s forwards;
       flex-shrink: 0;
     }
-    /* The visible circle — everything clipped inside */
     .hero-visual-circle {
       width: 100%; height: 100%;
       border-radius: 50%;
       border: 1px solid rgba(201,168,76,.22);
       background: radial-gradient(ellipse 80% 80% at 50% 50%,
-        rgba(201,168,76,.06) 0%,
-        rgba(201,168,76,.02) 40%,
-        transparent 70%);
+        rgba(201,168,76,.06) 0%, rgba(201,168,76,.02) 40%, transparent 70%);
       box-shadow: 0 0 60px rgba(201,168,76,.07), inset 0 0 40px rgba(201,168,76,.04);
       display: flex; align-items: center; justify-content: center;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-    /* Orbiting rings — all contained */
     .hv-ring {
       position: absolute; border-radius: 50%;
       border: 1px solid rgba(201,168,76,.1);
@@ -643,64 +609,131 @@
     .hv-ring-2 { width: 68%; height: 68%; border-color: rgba(201,168,76,.16); animation: hvSpin 16s linear infinite reverse; }
     .hv-ring-3 { width: 44%; height: 44%; border-color: rgba(201,168,76,.08); animation: hvSpin 30s linear infinite; }
     @keyframes hvSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-
-    /* Orbiting dot on ring-1 */
     .hv-orb {
-      position: absolute;
-      width: 6px; height: 6px;
-      background: var(--gold);
-      border-radius: 50%;
-      top: 4%; left: 50%;
-      transform: translateX(-50%);
-      opacity: .8;
-      box-shadow: 0 0 8px rgba(201,168,76,.6);
+      position: absolute; width: 6px; height: 6px;
+      background: var(--gold); border-radius: 50%;
+      top: 4%; left: 50%; transform: translateX(-50%);
+      opacity: .8; box-shadow: 0 0 8px rgba(201,168,76,.6);
     }
-
-    /* Icon container */
     .hv-icon-wrap {
-      position: relative;
-      width: 110px; height: 110px;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 2;
+      position: relative; width: 110px; height: 110px;
+      display: flex; align-items: center; justify-content: center; z-index: 2;
     }
     .hv-icon {
-      position: absolute;
-      width: 88px; height: 88px;
-      opacity: 0;
-      transform: scale(.65) rotate(-8deg);
+      position: absolute; width: 88px; height: 88px;
+      opacity: 0; transform: scale(.65) rotate(-8deg);
       transition: opacity .65s ease, transform .65s cubic-bezier(.34,1.3,.64,1);
       filter: drop-shadow(0 0 22px rgba(201,168,76,.5));
     }
-    .hv-icon.active {
-      opacity: 1;
-      transform: scale(1) rotate(0deg);
-    }
-
-    /* Label + dots below icon, inside circle */
+    .hv-icon.active { opacity: 1; transform: scale(1) rotate(0deg); }
     .hv-meta {
-      position: absolute;
-      bottom: 38px;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      z-index: 2;
+      position: absolute; bottom: 38px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2;
     }
     .hv-label {
-      font-family: 'Syne', sans-serif;
-      font-size: .58rem;
-      letter-spacing: .38em;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: .65;
-      transition: opacity .3s;
+      font-family: 'Syne', sans-serif; font-size: .58rem;
+      letter-spacing: .38em; text-transform: uppercase;
+      color: var(--gold); opacity: .65; transition: opacity .3s;
     }
     .hv-dots { display: flex; gap: 6px; }
     .hv-dot {
       width: 4px; height: 4px; border-radius: 50%;
-      background: rgba(201,168,76,.25);
-      transition: background .3s, transform .3s;
+      background: rgba(201,168,76,.25); transition: background .3s, transform .3s;
     }
     .hv-dot.active { background: var(--gold); transform: scale(1.4); }
 
-    @media (max-width: 1100px) { .hero-visual-outer { display: none; } }
+    /* ─── RESPONSIVE ─── */
+
+    /* Large tablets / small desktops */
+    @media (max-width:1200px) {
+      .hero-visual-outer { width: 260px; height: 260px; right: 3%; }
+      .hero-content { max-width: 560px; }
+    }
+
+    /* Tablets: hero layout stacks, animation moves below text */
+    @media (max-width:1024px) {
+      .svc-row { grid-template-columns:repeat(2,1fr); }
+      .ft-grid { grid-template-columns:1fr 1fr; }
+      .svc-detail-item { grid-template-columns:40px 1fr; }
+      .sd-features { display:none; }
+      /* Stack hero: animation goes below the text */
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8rem 2.5rem 3rem;
+        min-height: auto;
+        gap: 3rem;
+      }
+      .hero-content { max-width: 100%; }
+      .hero-visual-outer {
+        position: relative;
+        right: auto; top: auto;
+        transform: none;
+        width: 220px; height: 220px;
+        align-self: center;
+        margin: 0 auto;
+      }
+      .hero-aside { right: 2rem; bottom: 2rem; gap: 2rem; }
+    }
+
+    /* Mobile phones */
+    @media (max-width:768px) {
+      nav { padding:1.2rem 1.5rem; }
+      .nav-links, .nav-btn { display:none; }
+      .hamburger { display:flex; }
+      .hero {
+        padding: 6rem 1.5rem 2.5rem;
+        gap: 2.5rem;
+        min-height: 100svh;
+      }
+      .hero-content { max-width: 100%; }
+      .hero-h1 { font-size: clamp(2.8rem, 11vw, 5rem); }
+      .hero-p { font-size: .9rem; max-width: 100%; }
+      .hero-aside { display:none; }
+      .scroll-hint { display: none; }
+      /* Animation on mobile: smaller, centred */
+      .hero-visual-outer {
+        width: 190px; height: 190px;
+        margin: 0 auto;
+      }
+      .hv-icon { width: 68px; height: 68px; }
+      .hv-icon-wrap { width: 80px; height: 80px; }
+      .hv-meta { bottom: 26px; }
+      .sec { padding:4rem 0; }
+      .about-grid { grid-template-columns:1fr; }
+      .about-visual { display:none; }
+      .svc-row { grid-template-columns:1fr; }
+      .work-bento .wc { grid-column:span 12 !important; }
+      .projects-grid { grid-template-columns:1fr; }
+      .team-grid { grid-template-columns:1fr 1fr !important; }
+      .values-grid { grid-template-columns:1fr; }
+      .val-item { border-right:none; }
+      .contact-grid { grid-template-columns:1fr; gap:3rem; }
+      .form-row { grid-template-columns:1fr; }
+      .pricing-grid { grid-template-columns:1fr; }
+      .ft-grid { grid-template-columns:1fr; }
+      .pg-hero { padding:7rem 1.5rem 3rem; }
+      .cta-band { flex-direction:column; padding: 3rem 1.5rem; }
+      .cta-band-t { font-size: clamp(1.6rem,7vw,2.5rem); }
+    }
+
+    /* Small phones */
+    @media (max-width:480px) {
+      .hero { padding: 5.5rem 1.2rem 2rem; gap: 2rem; }
+      .hero-h1 { font-size: clamp(2.4rem, 13vw, 3.5rem); }
+      .hero-btns { flex-direction: column; gap: .8rem; }
+      .btn-gold, .btn-outline { width: 100%; justify-content: center; text-align: center; }
+      .hero-visual-outer { width: 160px; height: 160px; }
+      .hv-icon { width: 56px; height: 56px; }
+      .hv-icon-wrap { width: 66px; height: 66px; }
+      .hv-meta { bottom: 18px; }
+      .hv-label { font-size: .5rem; letter-spacing: .28em; }
+      .team-grid { grid-template-columns: 1fr 1fr !important; gap: 1rem; }
+      .pg-hero { padding: 6rem 1.2rem 2.5rem; }
+      .display-title { font-size: clamp(2.2rem, 10vw, 4rem); }
+      .filter-bar { gap: .6rem; }
+      .filter-btn { padding: .45rem 1rem; font-size: .6rem; }
+    }
   </style>
 </head>
 <body>
@@ -1346,7 +1379,7 @@
         <div class="price-card featured">
           <div class="price-badge">Most Popular</div>
           <div class="price-tier">Studio</div>
-          <div class="price-amount"><span>₦</span>30,000</div>
+          <div class="price-amount"><span>₦</span>18,500,000</div>
           <div class="price-period">Starting from</div>
           <ul class="price-features">
             <li>Full Brand Identity</li>
