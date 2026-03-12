@@ -58,15 +58,41 @@
     .rv { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
     .rv.vis { opacity:1; transform:translateY(0); }
     .rv-d1 { transition-delay:.1s; }
-    @keyframes pageIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fadeU { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes ping { 0%{width:10px;height:10px;opacity:1} 100%{width:80px;height:80px;opacity:0} }
+    @keyframes pageIn { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeU  { from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)} }
 
+    /* HERO */
     .pg-hero { padding:9rem 0 4rem; position:relative; overflow:hidden; }
     .pg-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,168,76,.04) 0%, transparent 70%); pointer-events:none; }
     .pg-hero .display-title { animation:fadeU .9s .2s both; }
-    .pg-hero .lbl { animation:fadeU .7s .1s both; }
-    .pg-hero .body-text { animation:fadeU .8s .35s both; }
+    .pg-hero .lbl        { animation:fadeU .7s .1s both; }
+    .pg-hero .body-text  { animation:fadeU .8s .35s both; }
+    .pg-hero-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+
+    /* ── CONVERSATION ANIMATION CARD ── */
+    .convo-wrap {
+      position:relative;
+      border:1px solid rgba(201,168,76,.2);
+      background:linear-gradient(160deg,#12100a 0%,#0e0c08 60%,#141210 100%);
+      overflow:hidden;
+      aspect-ratio:4/3;
+      animation:fadeU .9s .5s both;
+    }
+    .convo-wrap::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent); opacity:.4;
+    }
+    .rec-corner { position:absolute; width:12px; height:12px; }
+    .rec-corner-tl { top:8px; left:8px;   border-top:1px solid var(--gold); border-left:1px solid var(--gold); }
+    .rec-corner-tr { top:8px; right:8px;  border-top:1px solid var(--gold); border-right:1px solid var(--gold); }
+    .rec-corner-bl { bottom:8px; left:8px;  border-bottom:1px solid var(--gold); border-left:1px solid var(--gold); }
+    .rec-corner-br { bottom:8px; right:8px; border-bottom:1px solid var(--gold); border-right:1px solid var(--gold); }
+    .convo-label {
+      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      font-family:'Syne',sans-serif; font-size:.48rem; letter-spacing:.35em;
+      text-transform:uppercase; color:var(--gold); opacity:.4; white-space:nowrap;
+      pointer-events:none;
+    }
 
     /* CONTACT */
     .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start; }
@@ -111,6 +137,9 @@
     .ft-socials a { font-family:'Syne',sans-serif; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text3); text-decoration:none; transition:color .2s; cursor:none; }
     .ft-socials a:hover { color:var(--gold); }
 
+    @media (max-width:1024px) {
+      .pg-hero-inner { grid-template-columns:1fr; gap:3rem; }
+    }
     @media (max-width:768px) {
       nav { padding:1.2rem 1.5rem; }
       .nav-links, .nav-btn { display:none; }
@@ -166,9 +195,172 @@
 <!-- HERO -->
 <div class="pg-hero">
   <div class="container-fluid px-4 px-md-5">
-    <div class="lbl">Get In Touch</div>
-    <h1 class="display-title">Let's build<br>something <em>together</em></h1>
-    <p class="body-text mt-3" style="max-width:500px;">We take on a limited number of projects each quarter. Tell us about yours and let's find out if we're a good fit.</p>
+    <div class="pg-hero-inner">
+      <div>
+        <div class="lbl">Get In Touch</div>
+        <h1 class="display-title">Let's build<br>something <em>together</em></h1>
+        <p class="body-text mt-3" style="max-width:500px;">We take on a limited number of projects each quarter. Tell us about yours and let's find out if we're a good fit.</p>
+      </div>
+
+      <!-- ══════════════════════════════════
+           CONVERSATION ANIMATION
+           SVG viewBox 400 × 300
+           Person A (client) — left side  ~x 80
+           Person B (studio) — right side ~x 300
+      ══════════════════════════════════ -->
+      <div class="convo-wrap">
+        <div class="rec-corner rec-corner-tl"></div>
+        <div class="rec-corner rec-corner-tr"></div>
+        <div class="rec-corner rec-corner-bl"></div>
+        <div class="rec-corner rec-corner-br"></div>
+
+        <svg id="convo-svg" viewBox="0 0 400 300" width="100%" height="100%"
+             fill="none" xmlns="http://www.w3.org/2000/svg"
+             style="position:absolute;inset:0;">
+
+          <!-- bg glow -->
+          <radialGradient id="cGlow" cx="50%" cy="70%" r="55%">
+            <stop offset="0%"   stop-color="#c9a84c" stop-opacity=".035"/>
+            <stop offset="100%" stop-color="#0c0c0e" stop-opacity="0"/>
+          </radialGradient>
+          <rect width="400" height="300" fill="url(#cGlow)"/>
+
+          <!-- floor -->
+          <line x1="0" y1="248" x2="400" y2="248" stroke="rgba(201,168,76,.1)" stroke-width="1"/>
+
+          <!-- subtle wall line -->
+          <line x1="0" y1="108" x2="400" y2="108" stroke="rgba(201,168,76,.05)" stroke-width=".6"/>
+
+          <!-- ── PERSON A (client, left) ── -->
+          <g id="personA">
+            <!-- body -->
+            <rect x="62" y="178" width="18" height="22" rx="4"
+                  fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.65)" stroke-width="1"/>
+            <!-- collar -->
+            <path d="M67 178 L71 183 L75 178" stroke="rgba(201,168,76,.4)" stroke-width=".8" fill="none"/>
+            <!-- head -->
+            <circle cx="71" cy="169" r="9"
+                    fill="rgba(201,168,76,.12)" stroke="rgba(201,168,76,.7)" stroke-width="1.2"/>
+            <!-- hair -->
+            <path d="M62 166 Q64 159 71 158 Q78 159 80 166"
+                  fill="rgba(201,168,76,.28)" stroke="rgba(201,168,76,.5)" stroke-width=".8"/>
+            <!-- eyes -->
+            <circle cx="67.5" cy="169" r="1.2" fill="rgba(201,168,76,.8)"/>
+            <circle cx="74.5" cy="169" r="1.2" fill="rgba(201,168,76,.8)"/>
+            <!-- neutral mouth -->
+            <path d="M68 173 Q71 175 74 173" stroke="rgba(201,168,76,.5)" stroke-width=".8" fill="none"/>
+            <!-- legs -->
+            <line x1="66" y1="200" x2="66" y2="216" stroke="rgba(201,168,76,.6)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="74" y1="200" x2="74" y2="216" stroke="rgba(201,168,76,.6)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- right arm (waves toward right during handshake) -->
+            <line id="armA" x1="80" y1="186" x2="90" y2="192"
+                  stroke="rgba(201,168,76,.6)" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- ── PERSON B (studio, right) ── -->
+          <g id="personB">
+            <!-- body -->
+            <rect x="320" y="178" width="18" height="22" rx="4"
+                  fill="rgba(201,168,76,.18)" stroke="rgba(201,168,76,.7)" stroke-width="1"/>
+            <!-- collar / tie detail -->
+            <path d="M325 178 L329 183 L333 178" stroke="rgba(201,168,76,.45)" stroke-width=".8" fill="none"/>
+            <path d="M329 183 L329 194" stroke="rgba(201,168,76,.3)" stroke-width="1" stroke-linecap="round"/>
+            <!-- head -->
+            <circle cx="329" cy="169" r="9"
+                    fill="rgba(201,168,76,.14)" stroke="rgba(201,168,76,.75)" stroke-width="1.2"/>
+            <!-- hair (shorter, combed) -->
+            <path d="M320 165 Q322 159 329 158 Q336 159 338 165"
+                  fill="rgba(201,168,76,.32)" stroke="rgba(201,168,76,.55)" stroke-width=".8"/>
+            <!-- eyes -->
+            <circle cx="325" cy="169" r="1.2" fill="rgba(201,168,76,.8)"/>
+            <circle cx="333" cy="169" r="1.2" fill="rgba(201,168,76,.8)"/>
+            <!-- neutral mouth -->
+            <path d="M326 173 Q329 175 332 173" stroke="rgba(201,168,76,.5)" stroke-width=".8" fill="none"/>
+            <!-- legs -->
+            <line x1="324" y1="200" x2="324" y2="216" stroke="rgba(201,168,76,.6)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="332" y1="200" x2="332" y2="216" stroke="rgba(201,168,76,.6)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- left arm (waves toward left during handshake) -->
+            <line id="armB" x1="320" y1="186" x2="310" y2="192"
+                  stroke="rgba(201,168,76,.6)" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- ── CHAT BUBBLE A (left, points left-bottom) ── -->
+          <!-- bubble rect origin: left-aligned from person A head -->
+          <g id="bubbleA" opacity="0">
+            <rect id="bA-rect" x="88" y="130" width="90" height="28" rx="12"
+                  fill="rgba(201,168,76,.18)" stroke="rgba(201,168,76,.65)" stroke-width="1.1"/>
+            <!-- tail pointing to person A (left) -->
+            <path d="M95 158 L84 165 L105 158Z"
+                  fill="rgba(201,168,76,.18)" stroke="rgba(201,168,76,.65)" stroke-width="1"/>
+            <text id="bA-text" x="133" y="149"
+                  font-family="'DM Sans',sans-serif" font-size="9.5" font-weight="300"
+                  fill="rgba(201,168,76,.95)" text-anchor="middle"
+                  dominant-baseline="middle">new project</text>
+          </g>
+
+          <!-- ── CHAT BUBBLE B (right, points right-bottom) ── -->
+          <g id="bubbleB" opacity="0">
+            <rect id="bB-rect" x="214" y="130" width="110" height="28" rx="12"
+                  fill="rgba(201,168,76,.22)" stroke="rgba(201,168,76,.7)" stroke-width="1.1"/>
+            <!-- tail pointing to person B (right) -->
+            <path d="M308 158 L322 165 L296 158Z"
+                  fill="rgba(201,168,76,.22)" stroke="rgba(201,168,76,.7)" stroke-width="1"/>
+            <text id="bB-text" x="269" y="149"
+                  font-family="'DM Sans',sans-serif" font-size="9.5" font-weight="300"
+                  fill="rgba(201,168,76,.95)" text-anchor="middle"
+                  dominant-baseline="middle">brand identity</text>
+          </g>
+
+          <!-- ── CHAT BUBBLE A2 ("let's talk") ── -->
+          <g id="bubbleA2" opacity="0">
+            <rect x="88" y="96" width="80" height="28" rx="12"
+                  fill="rgba(201,168,76,.18)" stroke="rgba(201,168,76,.65)" stroke-width="1.1"/>
+            <path d="M95 124 L84 131 L105 124Z"
+                  fill="rgba(201,168,76,.18)" stroke="rgba(201,168,76,.65)" stroke-width="1"/>
+            <text x="128" y="115"
+                  font-family="'DM Sans',sans-serif" font-size="9.5" font-weight="300"
+                  fill="rgba(201,168,76,.95)" text-anchor="middle"
+                  dominant-baseline="middle">let's talk</text>
+          </g>
+
+          <!-- ── HANDSHAKE SPARK ── -->
+          <!-- Small gold starburst at the midpoint between arms x~200 y~192 -->
+          <g id="spark" opacity="0">
+            <circle cx="200" cy="193" r="5" fill="rgba(201,168,76,.7)"/>
+            <line x1="200" y1="183" x2="200" y2="178" stroke="rgba(201,168,76,.8)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="200" y1="203" x2="200" y2="208" stroke="rgba(201,168,76,.8)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="190" y1="193" x2="185" y2="193" stroke="rgba(201,168,76,.8)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="210" y1="193" x2="215" y2="193" stroke="rgba(201,168,76,.8)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="193" y1="186" x2="190" y2="183" stroke="rgba(201,168,76,.6)" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="207" y1="186" x2="210" y2="183" stroke="rgba(201,168,76,.6)" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="193" y1="200" x2="190" y2="203" stroke="rgba(201,168,76,.6)" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="207" y1="200" x2="210" y2="203" stroke="rgba(201,168,76,.6)" stroke-width="1.2" stroke-linecap="round"/>
+          </g>
+
+          <!-- ── TYPING INDICATOR (three dots) for each person ── -->
+          <!-- shown briefly before each bubble appears -->
+          <g id="typingA" opacity="0">
+            <rect x="88" y="150" width="38" height="20" rx="10"
+                  fill="rgba(201,168,76,.14)" stroke="rgba(201,168,76,.5)" stroke-width=".9"/>
+            <circle id="tA1" cx="101" cy="160" r="2.2" fill="rgba(201,168,76,.7)"/>
+            <circle id="tA2" cx="109" cy="160" r="2.2" fill="rgba(201,168,76,.7)"/>
+            <circle id="tA3" cx="117" cy="160" r="2.2" fill="rgba(201,168,76,.7)"/>
+          </g>
+          <g id="typingB" opacity="0">
+            <rect x="274" y="150" width="38" height="20" rx="10"
+                  fill="rgba(201,168,76,.14)" stroke="rgba(201,168,76,.5)" stroke-width=".9"/>
+            <circle id="tB1" cx="287" cy="160" r="2.2" fill="rgba(201,168,76,.7)"/>
+            <circle id="tB2" cx="295" cy="160" r="2.2" fill="rgba(201,168,76,.7)"/>
+            <circle id="tB3" cx="303" cy="160" r="2.2" fill="rgba(201,168,76,.7)"/>
+          </g>
+
+        </svg>
+
+        <div class="convo-label">Luminous Studio — New Enquiry</div>
+      </div>
+      <!-- END CONVERSATION ANIMATION -->
+
+    </div>
   </div>
 </div>
 
@@ -280,59 +472,239 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script>
-  const cur = document.getElementById('cur');
-  const curR = document.getElementById('curR');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-  (function animR(){ rx+=(mx-rx)*.13; ry+=(my-ry)*.13; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(animR); })();
-  document.querySelectorAll('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
-  });
-  window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',scrollY>40); });
-  function toggleMobile(){
-    document.getElementById('mobileMenu').classList.toggle('open');
-    document.getElementById('hamburger').classList.toggle('open');
-  }
-  const observer = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); }); },{threshold:.12});
-  document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
+// ── CURSOR ──
+const cur  = document.getElementById('cur');
+const curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function animR(){ rx+=(mx-rx)*.13; ry+=(my-ry)*.13; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(animR); })();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+});
+window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',scrollY>40); });
+function toggleMobile(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+const observer = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); }); },{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
 
-  function submitForm(){
-    const inputs = document.querySelectorAll('#contactForm .form-input, #contactForm .form-textarea, #contactForm .form-select');
-    const firstName = inputs[0]?.value.trim();
-    const lastName  = inputs[1]?.value.trim();
-    const email     = inputs[2]?.value.trim();
-    const company   = inputs[3]?.value.trim();
-    const service   = inputs[4]?.value;
-    const message   = inputs[5]?.value.trim();
-
-    if(!firstName || !email || !message){
-      [inputs[0], inputs[2], inputs[5]].forEach(f=>{ if(f && !f.value.trim()) f.style.borderColor='var(--gold)'; });
-      if(!document.getElementById('formErr')){
-        const e = document.createElement('p');
-        e.id='formErr';
-        e.style.cssText='font-family:Syne,sans-serif;font-size:.7rem;letter-spacing:.1em;color:var(--gold);margin-top:.5rem;';
-        e.textContent='Please fill in your name, email, and project details.';
-        document.querySelector('.submit-btn').insertAdjacentElement('beforebegin', e);
-      }
-      return;
+// ── FORM ──
+function submitForm(){
+  const inputs = document.querySelectorAll('#contactForm .form-input, #contactForm .form-textarea, #contactForm .form-select');
+  const firstName = inputs[0]?.value.trim();
+  const lastName  = inputs[1]?.value.trim();
+  const email     = inputs[2]?.value.trim();
+  const company   = inputs[3]?.value.trim();
+  const service   = inputs[4]?.value;
+  const message   = inputs[5]?.value.trim();
+  if(!firstName || !email || !message){
+    [inputs[0],inputs[2],inputs[5]].forEach(f=>{ if(f&&!f.value.trim()) f.style.borderColor='var(--gold)'; });
+    if(!document.getElementById('formErr')){
+      const e=document.createElement('p');
+      e.id='formErr';
+      e.style.cssText='font-family:Syne,sans-serif;font-size:.7rem;letter-spacing:.1em;color:var(--gold);margin-top:.5rem;';
+      e.textContent='Please fill in your name, email, and project details.';
+      document.querySelector('.submit-btn').insertAdjacentElement('beforebegin',e);
     }
-
-    const phone = '2349166819937';
-    const text = [
-      '✦ NEW PROJECT ENQUIRY — Luminous Studio', '',
-      'Name: ' + firstName + ' ' + lastName,
-      'Email: ' + email,
-      company ? 'Company: ' + company : null,
-      service ? 'Service: ' + service : null,
-      '', 'Project Details:', message, '',
-      '— Sent via luminous.studio'
-    ].filter(l=>l!==null).join('\n');
-
-    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
-    document.getElementById('contactForm').style.display='none';
-    document.getElementById('formSuccess').classList.add('show');
+    return;
   }
+  const phone='2349166819937';
+  const text=[
+    '✦ NEW PROJECT ENQUIRY — Luminous Studio','',
+    'Name: '+firstName+' '+lastName,
+    'Email: '+email,
+    company?'Company: '+company:null,
+    service?'Service: '+service:null,
+    '','Project Details:',message,'',
+    '— Sent via luminous.studio'
+  ].filter(l=>l!==null).join('\n');
+  window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank');
+  document.getElementById('contactForm').style.display='none';
+  document.getElementById('formSuccess').classList.add('show');
+}
+
+// ══════════════════════════════════════════════════════════
+// CONVERSATION ANIMATION
+// Rounds alternate between two reply messages from Person B:
+//   Round 0, 2, 4 … → "brand identity"
+//   Round 1, 3, 5 … → "video editing"
+// Sequence per round:
+//   0.0s  – typing indicator A appears
+//   0.8s  – typing hides, bubble A "new project" fades in
+//   2.2s  – typing indicator B appears
+//   3.0s  – typing hides, bubble B (service) fades in
+//   4.6s  – both bubbles fade up; typing A2 appears
+//   5.4s  – typing hides, bubble A2 "let's talk" fades in
+//   6.8s  – all bubbles fade, arms extend for handshake
+//   7.2s  – spark appears
+//   7.8s  – spark fades, arms retract
+//   8.6s  – pause
+//   9.4s  – everything resets, next round starts
+// ══════════════════════════════════════════════════════════
+
+const bServiceLabels = ['brand identity', 'video editing'];
+let round = 0;
+
+// helper: fade an element
+function fade(el, toOpacity, durationMs){
+  el.style.transition = `opacity ${durationMs}ms ease`;
+  el.style.opacity    = toOpacity;
+}
+
+// typing dot bounce animation
+let dotTimers = [];
+function startDots(prefix){
+  const dots = [
+    document.getElementById(prefix+'1'),
+    document.getElementById(prefix+'2'),
+    document.getElementById(prefix+'3'),
+  ];
+  let i = 0;
+  dotTimers.push(setInterval(()=>{
+    dots.forEach((d,idx)=>{
+      d.style.transition='transform .2s ease, opacity .2s ease';
+      d.style.transform  = idx===i ? 'translateY(-3px)' : 'translateY(0)';
+      d.style.opacity    = idx===i ? '1' : '0.4';
+    });
+    i = (i+1)%3;
+  }, 220));
+}
+function clearDots(){
+  dotTimers.forEach(clearInterval);
+  dotTimers = [];
+  ['tA1','tA2','tA3','tB1','tB2','tB3'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){ el.style.transform=''; el.style.opacity='1'; }
+  });
+}
+
+// arm positions
+const armA = document.getElementById('armA');
+const armB = document.getElementById('armB');
+function armsNeutral(){
+  armA.setAttribute('x2','90');  armA.setAttribute('y2','192');
+  armB.setAttribute('x2','310'); armB.setAttribute('y2','192');
+}
+function armsExtended(){
+  // A arm reaches right toward centre
+  armA.setAttribute('x2','195'); armA.setAttribute('y2','193');
+  // B arm reaches left toward centre
+  armB.setAttribute('x2','205'); armB.setAttribute('y2','193');
+}
+
+// elements
+const typingA  = document.getElementById('typingA');
+const typingB  = document.getElementById('typingB');
+const bubbleA  = document.getElementById('bubbleA');
+const bubbleB  = document.getElementById('bubbleB');
+const bubbleA2 = document.getElementById('bubbleA2');
+const bBtext   = document.getElementById('bB-text');
+const spark    = document.getElementById('spark');
+
+function resetAll(){
+  fade(typingA,  0, 0);
+  fade(typingB,  0, 0);
+  fade(bubbleA,  0, 0);
+  fade(bubbleB,  0, 0);
+  fade(bubbleA2, 0, 0);
+  fade(spark,    0, 0);
+  clearDots();
+  armsNeutral();
+}
+
+function runRound(){
+  resetAll();
+
+  // set the service label for this round
+  bBtext.textContent = bServiceLabels[round % bServiceLabels.length];
+
+  // timeline using chained setTimeouts
+  const t = (ms, fn) => setTimeout(fn, ms);
+
+  // 0ms — typing A
+  t(0, ()=>{
+    fade(typingA, 1, 300);
+    startDots('tA');
+  });
+
+  // 900ms — hide typing A, show bubble A
+  t(900, ()=>{
+    fade(typingA, 0, 200);
+    clearDots();
+    setTimeout(()=> fade(bubbleA, 1, 350), 220);
+  });
+
+  // 2300ms — typing B
+  t(2300, ()=>{
+    fade(typingB, 1, 300);
+    startDots('tB');
+  });
+
+  // 3200ms — hide typing B, show bubble B
+  t(3200, ()=>{
+    fade(typingB, 0, 200);
+    clearDots();
+    setTimeout(()=> fade(bubbleB, 1, 350), 220);
+  });
+
+  // 4800ms — typing A (for "let's talk")
+  // shift bubble A up slightly to make room — handled by bubbleA2 being above
+  t(4800, ()=>{
+    // nudge bubbleA up
+    const rA = document.getElementById('bA-rect');
+    // bubbleA2 is at y=96, bubbleA stays at y=130 — they stack nicely
+    fade(typingA, 1, 300);
+    startDots('tA');
+  });
+
+  // 5700ms — hide typing A, show bubble A2 "let's talk"
+  t(5700, ()=>{
+    fade(typingA, 0, 200);
+    clearDots();
+    setTimeout(()=> fade(bubbleA2, 1, 350), 220);
+  });
+
+  // 7000ms — fade all bubbles, extend arms for handshake
+  t(7000, ()=>{
+    fade(bubbleA,  0, 400);
+    fade(bubbleB,  0, 400);
+    fade(bubbleA2, 0, 400);
+    setTimeout(()=>{
+      // smoothly animate arms via style transition
+      armA.style.transition = 'all 0.5s ease';
+      armB.style.transition = 'all 0.5s ease';
+      armsExtended();
+    }, 450);
+  });
+
+  // 7700ms — spark
+  t(7700, ()=>{
+    fade(spark, 1, 200);
+  });
+
+  // 8200ms — spark pulse out
+  t(8200, ()=>{
+    fade(spark, 0, 300);
+  });
+
+  // 8700ms — arms retract
+  t(8700, ()=>{
+    armA.style.transition = 'all 0.4s ease';
+    armB.style.transition = 'all 0.4s ease';
+    armsNeutral();
+  });
+
+  // 10000ms — reset and start next round
+  t(10000, ()=>{
+    round++;
+    runRound();
+  });
+}
+
+// kick off after page settles
+setTimeout(runRound, 1200);
 </script>
 </body>
 </html>
